@@ -1,4 +1,5 @@
 use crate::token::Token;
+mod eval;
 mod parsing;
 
 #[derive(Debug)]
@@ -8,7 +9,7 @@ pub enum Expr {
     Binary(Box<Expr>, Token, Box<Expr>),
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub enum Value {
     Number(f32),
     Str(String),

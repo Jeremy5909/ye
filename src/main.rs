@@ -15,8 +15,12 @@ fn main() {
         stdin().read_line(&mut inp).unwrap();
         let mut scanner = Scanner::new(inp.trim());
         scanner.scan_tokens();
+        println!("Tokens:\n{:?}\n\n", scanner.tokens);
+
         let mut parser = Parser::new(scanner.tokens);
         let expr = parser.parse_expr();
-        println!("{:#?}", expr);
+        println!("Expr: \n{:#?}\n\n", expr);
+
+        println!("Eval: \n{:?}\n\n", expr.eval());
     }
 }
