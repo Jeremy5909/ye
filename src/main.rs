@@ -8,6 +8,8 @@ mod scanner;
 mod token;
 
 fn main() {
+    let mut env = Enviroment::new();
+    env.set(String::from("x"), parser::Value::Number(420.0));
     loop {
         let mut inp = String::new();
         print!("> ");
@@ -20,8 +22,6 @@ fn main() {
         let mut parser = Parser::new(scanner.tokens);
         let expr = parser.parse_expr();
         println!("Expr: \n{:#?}\n\n", expr);
-        let mut env = Enviroment::new();
-        env.set(String::from("x"), parser::Value::Number(420.0));
-        println!("Eval: \n{:?}\n\n", expr.eval(&env));
+        println!("Eval: \n{:?}\n\n", expr.eval(&mut env));
     }
 }

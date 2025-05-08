@@ -4,6 +4,7 @@ pub enum Token {
     Sub,
     Mult,
     Div,
+    Equal,
 
     LParen,
     RParen,

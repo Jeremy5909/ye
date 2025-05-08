@@ -14,6 +14,7 @@ impl Scanner {
                 '/' => Token::Div,
                 '(' => Token::LParen,
                 ')' => Token::RParen,
+                '=' => Token::Equal,
                 '"' => self.scan_string().unwrap(),
                 _ => {
                     if next.is_numeric() || next == '.' {

@@ -19,7 +19,7 @@ impl Enviroment {
 }
 
 impl Expr {
-    pub fn eval(&self, env: &Enviroment) -> Value {
+    pub fn eval(&self, env: &mut Enviroment) -> Value {
         match self {
             Expr::Variable(v) => env
                 .get(v)
@@ -37,6 +37,11 @@ impl Expr {
                     (Value::Str(a), Value::Str(b), Token::Add) => Value::Str(a + b.as_str()),
                     _ => panic!("Invalid operands"),
                 }
+            }
+            Expr::Assign(name, expr) => {
+                let value = expr.eval(env);
+                env.set(name.to_owned(), value.clone());
+                value
             }
         }
     }

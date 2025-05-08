@@ -7,6 +7,7 @@ pub enum Expr {
     Literal(Value),
     Variable(String),
     Binary(Box<Expr>, Token, Box<Expr>),
+    Assign(String, Box<Expr>),
 }
 
 #[derive(Debug, Clone)]

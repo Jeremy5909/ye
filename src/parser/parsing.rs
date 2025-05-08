@@ -6,7 +6,20 @@ use super::Value;
 
 impl Parser {
     pub fn parse_expr(&mut self) -> Expr {
-        self.parse_term()
+        self.parse_assignment()
+    }
+    fn parse_assignment(&mut self) -> Expr {
+        let expr = self.parse_term();
+        if let Some(Token::Equal) = self.peek() {
+            self.advance();
+            if let Expr::Variable(name) = expr {
+                let value_expr = self.parse_assignment();
+                return Expr::Assign(name, Box::new(value_expr));
+            } else {
+                panic!("Invalid assignment");
+            }
+        }
+        expr
     }
     fn parse_term(&mut self) -> Expr {
         let mut expr = self.parse_factor();
