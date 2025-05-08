@@ -1,5 +1,5 @@
 use crate::token::Token;
-mod eval;
+pub(crate) mod eval;
 mod parsing;
 
 #[derive(Debug)]

@@ -1,6 +1,6 @@
 use std::io::{Write, stdin, stdout};
 
-use parser::Parser;
+use parser::{Parser, eval::Enviroment};
 use scanner::Scanner;
 
 mod parser;
@@ -20,7 +20,8 @@ fn main() {
         let mut parser = Parser::new(scanner.tokens);
         let expr = parser.parse_expr();
         println!("Expr: \n{:#?}\n\n", expr);
-
-        println!("Eval: \n{:?}\n\n", expr.eval());
+        let mut env = Enviroment::new();
+        env.set(String::from("x"), parser::Value::Number(420.0));
+        println!("Eval: \n{:?}\n\n", expr.eval(&env));
     }
 }
