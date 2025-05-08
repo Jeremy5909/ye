@@ -3,8 +3,16 @@ mod parsing;
 
 #[derive(Debug)]
 pub enum Expr {
-    Literal(f32),
+    Literal(Value),
+    Variable(String),
     Binary(Box<Expr>, Token, Box<Expr>),
+}
+
+#[derive(Debug)]
+pub enum Value {
+    Number(f32),
+    Str(String),
+    Bool(bool),
 }
 
 pub struct Parser {

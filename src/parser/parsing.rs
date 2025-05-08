@@ -2,6 +2,8 @@ use crate::Parser;
 use crate::parser::Expr;
 use crate::token::Token;
 
+use super::Value;
+
 impl Parser {
     pub fn parse_expr(&mut self) -> Expr {
         self.parse_term()
@@ -37,7 +39,10 @@ impl Parser {
     fn parse_primary(&mut self) -> Expr {
         if let Some(tok) = self.advance() {
             match tok {
-                Token::Float(n) => Expr::Literal(*n),
+                Token::Float(n) => Expr::Literal(Value::Number(*n)),
+                Token::Str(s) => Expr::Literal(Value::Str(s.clone())),
+                Token::Bool(b) => Expr::Literal(Value::Bool(*b)),
+                Token::Identifier(name) => Expr::Variable(name.clone()),
                 Token::LParen => {
                     let expr = self.parse_expr();
                     match self.advance() {

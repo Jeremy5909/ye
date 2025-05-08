@@ -14,6 +14,7 @@ pub enum Token {
 
     Str(String),
     Float(f32),
+    Bool(bool),
 
     Identifier(String),
     Unknown,
