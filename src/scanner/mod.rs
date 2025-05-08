@@ -12,7 +12,7 @@ pub struct Scanner {
 }
 
 impl Scanner {
-    pub fn new(source: &str) -> Self {
+    pub fn from(source: &str) -> Self {
         let keyword_map =
             HashMap::from([("for", Token::For), ("fn", Token::Fn), ("if", Token::If)]);
         Self {
@@ -21,5 +21,8 @@ impl Scanner {
             index: 0,
             keyword_map,
         }
+    }
+    pub fn new() -> Self {
+        Self::from("")
     }
 }
