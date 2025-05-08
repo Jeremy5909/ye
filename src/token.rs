@@ -5,6 +5,9 @@ pub enum Token {
     Mult,
     Div,
 
+    LParen,
+    RParen,
+
     For,
     If,
     Fn,

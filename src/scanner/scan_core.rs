@@ -12,6 +12,8 @@ impl Scanner {
                 '-' => Token::Sub,
                 '*' => Token::Mult,
                 '/' => Token::Div,
+                '(' => Token::LParen,
+                ')' => Token::RParen,
                 '"' => self.scan_string().unwrap(),
                 _ => {
                     if next.is_numeric() || next == '.' {
