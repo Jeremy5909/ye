@@ -30,9 +30,11 @@ fn read_line(line: String, env: &mut Enviroment, dbg: bool) {
     println!("Tokens:\n{:?}\n\n", scanner.tokens);
 
     let mut parser = Parser::new(scanner.tokens);
-    let expr = parser.parse_expr();
+    let stmt = parser.parse();
     if dbg {
-        println!("Expr: \n{:#?}\n\n", expr);
-        println!("Eval: \n{:?}\n\n", expr.eval(env));
+        println!("Expr: \n{:#?}\n\n", stmt);
+        if let Some(val) = stmt.eval(env) {
+            println!("Eval: \n{:?}\n\n", val);
+        }
     }
 }

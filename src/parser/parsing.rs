@@ -1,11 +1,41 @@
+use core::panic;
+
 use crate::Parser;
 use crate::parser::Expr;
 use crate::token::Token;
 
-use super::Value;
+use super::{Statement, Value};
 
 impl Parser {
-    pub fn parse_expr(&mut self) -> Expr {
+    pub fn parse(&mut self) -> Statement {
+        self.parse_statement()
+    }
+    fn parse_statement(&mut self) -> Statement {
+        if let Some(stmt) = self.peek() {
+            match stmt {
+                Token::Let => {
+                    self.advance();
+                    let name = if let Some(Token::Identifier(name)) = self.peek() {
+                        name.clone()
+                    } else {
+                        panic!("Expected identifier after 'let'")
+                    };
+                    self.advance();
+                    if let Some(Token::Equal) = self.peek() {
+                        self.advance();
+                        let expr = self.parse_expr();
+                        Statement::Let(name, expr)
+                    } else {
+                        panic!("Expected '='")
+                    }
+                }
+                _ => Statement::Expr(self.parse_expr()),
+            }
+        } else {
+            Statement::Expr(self.parse_expr())
+        }
+    }
+    fn parse_expr(&mut self) -> Expr {
         self.parse_assignment()
     }
     fn parse_assignment(&mut self) -> Expr {

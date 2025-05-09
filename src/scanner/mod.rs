@@ -13,8 +13,12 @@ pub struct Scanner {
 
 impl Scanner {
     pub fn from(source: &str) -> Self {
-        let keyword_map =
-            HashMap::from([("for", Token::For), ("fn", Token::Fn), ("if", Token::If)]);
+        let keyword_map = HashMap::from([
+            ("for", Token::For),
+            ("fn", Token::Fn),
+            ("if", Token::If),
+            ("let", Token::Let),
+        ]);
         Self {
             source: source.chars().collect(),
             tokens: Vec::new(),

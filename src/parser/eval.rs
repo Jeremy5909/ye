@@ -39,6 +39,10 @@ impl Expr {
                 }
             }
             Expr::Assign(name, expr) => {
+                if !env.0.contains_key(name) {
+                    panic!("Variable {} not declared", name);
+                }
+
                 let value = expr.eval(env);
                 env.set(name.to_owned(), value.clone());
                 value

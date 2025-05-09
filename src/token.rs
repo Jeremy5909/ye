@@ -12,6 +12,7 @@ pub enum Token {
     For,
     If,
     Fn,
+    Let,
 
     Str(String),
     Float(f32),

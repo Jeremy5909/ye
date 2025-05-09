@@ -1,3 +1,5 @@
+use eval::Enviroment;
+
 use crate::token::Token;
 pub(crate) mod eval;
 mod parsing;
@@ -15,6 +17,24 @@ pub enum Value {
     Number(f32),
     Str(String),
     Bool(bool),
+}
+
+#[derive(Debug)]
+pub enum Statement {
+    Let(String, Expr),
+    Expr(Expr),
+}
+impl Statement {
+    pub fn eval(&self, env: &mut Enviroment) -> Option<Value> {
+        match self {
+            Statement::Let(name, expr) => {
+                let value = expr.eval(env);
+                env.set(name.clone(), value);
+                None
+            }
+            Statement::Expr(expr) => Some(expr.eval(env)),
+        }
+    }
 }
 
 pub struct Parser {
