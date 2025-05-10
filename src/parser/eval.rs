@@ -56,6 +56,10 @@ impl Expr {
                         Value::Bool(b) => Ok(Value::Bool(!b)),
                         _ => Err(ParsingError::InvalidOperands),
                     },
+                    Token::Sub => match value {
+                        Value::Number(n) => Ok(Value::Number(-n)),
+                        _ => Err(ParsingError::InvalidOperands),
+                    },
                     _ => Err(ParsingError::InvalidOperands),
                 }
             }

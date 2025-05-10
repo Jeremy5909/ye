@@ -79,12 +79,13 @@ impl Parser {
         Ok(expr)
     }
     fn parse_unary(&mut self) -> Result<Expr, ParsingError> {
-        if let Some(Token::Exclamation) = self.peek() {
-            let op = self.advance().unwrap().clone();
-            let right = self.parse_unary()?;
-            Ok(Expr::Unary(op, Box::new(right)))
-        } else {
-            self.parse_primary()
+        match self.peek() {
+            Some(Token::Exclamation) | Some(Token::Sub) => {
+                let op = self.advance().unwrap().clone();
+                let right = self.parse_unary()?;
+                Ok(Expr::Unary(op, Box::new(right)))
+            }
+            _ => self.parse_primary(),
         }
     }
     fn parse_primary(&mut self) -> Result<Expr, ParsingError> {
