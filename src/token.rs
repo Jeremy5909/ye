@@ -5,6 +5,7 @@ pub enum Token {
     Mult,
     Div,
     Equal,
+    Exclamation,
 
     LParen,
     RParen,

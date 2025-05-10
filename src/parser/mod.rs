@@ -11,6 +11,7 @@ pub enum Expr {
     Literal(Value),
     Variable(String),
     Binary(Box<Expr>, Token, Box<Expr>),
+    Unary(Token, Box<Expr>),
     Assign(String, Box<Expr>),
 }
 

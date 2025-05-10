@@ -15,6 +15,7 @@ impl Scanner {
                 '(' => Token::LParen,
                 ')' => Token::RParen,
                 '=' => Token::Equal,
+                '!' => Token::Exclamation,
                 '"' => self.scan_string().unwrap(),
                 _ => {
                     if next.is_numeric() || next == '.' {

@@ -27,9 +27,9 @@ impl Expr {
                 .ok_or(ParsingError::VariableNotFound(v.clone())),
             Expr::Literal(v) => Ok(v.clone()),
             Expr::Binary(left, op, right) => {
-                let l = left.eval(env);
-                let r = right.eval(env);
-                match (l?, r?, op) {
+                let l = left.eval(env)?;
+                let r = right.eval(env)?;
+                match (l, r, op) {
                     (Value::Number(a), Value::Number(b), Token::Add) => Ok(Value::Number(a + b)),
                     (Value::Number(a), Value::Number(b), Token::Sub) => Ok(Value::Number(a - b)),
                     (Value::Number(a), Value::Number(b), Token::Mult) => Ok(Value::Number(a * b)),
@@ -45,6 +45,16 @@ impl Expr {
                 let value = expr.eval(env)?;
                 env.set(name.to_owned(), value.clone());
                 Ok(value)
+            }
+            Expr::Unary(op, expr) => {
+                let value = expr.eval(env)?;
+                match op {
+                    Token::Exclamation => match value {
+                        Value::Bool(b) => Ok(Value::Bool(!b)),
+                        _ => Err(ParsingError::InvalidOperands),
+                    },
+                    _ => Err(ParsingError::InvalidOperands),
+                }
             }
         }
     }

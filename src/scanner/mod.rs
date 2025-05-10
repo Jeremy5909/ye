@@ -18,6 +18,8 @@ impl Scanner {
             ("fn", Token::Fn),
             ("if", Token::If),
             ("let", Token::Let),
+            ("true", Token::Bool(true)),
+            ("false", Token::Bool(false)),
         ]);
         Self {
             source: source.chars().collect(),

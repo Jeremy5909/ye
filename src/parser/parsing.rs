@@ -42,12 +42,13 @@ impl Parser {
             self.advance();
             if let Expr::Variable(name) = expr {
                 let value_expr = self.parse_assignment()?;
-                return Ok(Expr::Assign(name, Box::new(value_expr)));
+                Ok(Expr::Assign(name, Box::new(value_expr)))
             } else {
-                return Err(ParsingError::UnexpectedToken(Token::Equal));
+                Err(ParsingError::UnexpectedToken(Token::Equal))
             }
+        } else {
+            Ok(expr)
         }
-        Ok(expr)
     }
     fn parse_term(&mut self) -> Result<Expr, ParsingError> {
         let mut expr = self.parse_factor()?;
@@ -64,7 +65,7 @@ impl Parser {
         Ok(expr)
     }
     fn parse_factor(&mut self) -> Result<Expr, ParsingError> {
-        let mut expr = self.parse_primary()?;
+        let mut expr = self.parse_unary()?;
         while let Some(tok) = self.peek() {
             match tok {
                 Token::Mult | Token::Div => {
@@ -76,6 +77,15 @@ impl Parser {
             }
         }
         Ok(expr)
+    }
+    fn parse_unary(&mut self) -> Result<Expr, ParsingError> {
+        if let Some(Token::Exclamation) = self.peek() {
+            let op = self.advance().unwrap().clone();
+            let right = self.parse_unary()?;
+            Ok(Expr::Unary(op, Box::new(right)))
+        } else {
+            self.parse_primary()
+        }
     }
     fn parse_primary(&mut self) -> Result<Expr, ParsingError> {
         if let Some(tok) = self.advance() {
