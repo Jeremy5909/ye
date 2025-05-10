@@ -52,7 +52,7 @@ impl Expr {
             Expr::Unary(op, expr) => {
                 let value = expr.eval(env)?;
                 match op {
-                    Token::Exclamation => match value {
+                    Token::Not => match value {
                         Value::Bool(b) => Ok(Value::Bool(!b)),
                         _ => Err(ParsingError::InvalidOperands),
                     },

@@ -80,7 +80,7 @@ impl Parser {
     }
     fn parse_unary(&mut self) -> Result<Expr, ParsingError> {
         match self.peek() {
-            Some(Token::Exclamation) | Some(Token::Sub) => {
+            Some(Token::Not) | Some(Token::Sub) => {
                 let op = self.advance().unwrap().clone();
                 let right = self.parse_unary()?;
                 Ok(Expr::Unary(op, Box::new(right)))
