@@ -27,14 +27,15 @@ pub fn read_input(env: &mut Enviroment, dbg: bool) {
 fn read_line(line: String, env: &mut Enviroment, dbg: bool) {
     let mut scanner = Scanner::from(line.trim());
     scanner.scan_tokens();
-    println!("Tokens:\n{:?}\n\n", scanner.tokens);
+    if dbg {
+        println!("Tokens:\n{:?}\n\n", scanner.tokens);
+    }
 
     let mut parser = Parser::new(scanner.tokens);
     let stmt = parser.parse();
     if dbg {
-        println!("Expr: \n{:#?}\n\n", stmt);
-        if let Some(val) = stmt.eval(env) {
-            println!("Eval: \n{:?}\n\n", val);
+        if let Some(val) = stmt.eval(env).unwrap() {
+            println!("Value: {val:#?}\n");
         }
     }
 }
