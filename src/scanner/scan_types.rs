@@ -6,7 +6,7 @@ impl Scanner {
     pub(super) fn scan_string(&mut self) -> Result<Token, String> {
         let mut string = String::new();
         loop {
-            let next = self.advance().ok_or("Uncompleted thing")?;
+            let next = self.advance().ok_or("Uncompleted string")?;
             if next == '"' {
                 return Ok(Token::Str(string));
             }

@@ -1,5 +1,5 @@
 use error::ParsingError;
-use eval::Enviroment;
+use eval::Environment;
 
 use crate::token::Token;
 mod error;
@@ -28,7 +28,7 @@ pub enum Statement {
     Expr(Expr),
 }
 impl Statement {
-    pub fn eval(&self, env: &mut Enviroment) -> Result<Option<Value>, ParsingError> {
+    pub fn eval(&self, env: &mut Environment) -> Result<Option<Value>, ParsingError> {
         match self {
             Statement::Let(name, expr) => {
                 let value = expr.eval(env)?;

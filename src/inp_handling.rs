@@ -4,11 +4,11 @@ use std::{
 };
 
 use crate::{
-    parser::{Parser, eval::Enviroment},
+    parser::{Parser, eval::Environment},
     scanner::Scanner,
 };
 
-pub fn read_file(file_name: &str, env: &mut Enviroment) {
+pub fn read_file(file_name: &str, env: &mut Environment) {
     let file = fs::read_to_string(file_name).expect("File not found");
     let lines: Vec<_> = file.lines().collect();
     for line in lines.iter() {
@@ -16,7 +16,7 @@ pub fn read_file(file_name: &str, env: &mut Enviroment) {
     }
 }
 
-pub fn read_input(env: &mut Enviroment, dbg: bool) {
+pub fn read_input(env: &mut Environment, dbg: bool) {
     let mut inp = String::new();
     print!("> ");
     stdout().flush().unwrap();
@@ -24,7 +24,7 @@ pub fn read_input(env: &mut Enviroment, dbg: bool) {
     read_line(inp, env, dbg);
 }
 
-fn read_line(line: String, env: &mut Enviroment, dbg: bool) {
+fn read_line(line: String, env: &mut Environment, dbg: bool) {
     let mut scanner = Scanner::from(line.trim());
     scanner.scan_tokens();
     if dbg {

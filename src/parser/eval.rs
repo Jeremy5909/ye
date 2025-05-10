@@ -5,8 +5,8 @@ use crate::token::Token;
 use super::{Expr, Value, error::ParsingError};
 
 #[derive(Default)]
-pub struct Enviroment(HashMap<String, Value>);
-impl Enviroment {
+pub struct Environment(HashMap<String, Value>);
+impl Environment {
     pub fn new() -> Self {
         Self::default()
     }
@@ -16,10 +16,13 @@ impl Enviroment {
     pub fn set(&mut self, name: String, value: Value) {
         self.0.insert(name, value);
     }
+    pub fn contains(&self, name: &str) -> bool {
+        self.0.contains_key(name)
+    }
 }
 
 impl Expr {
-    pub fn eval(&self, env: &mut Enviroment) -> Result<Value, ParsingError> {
+    pub fn eval(&self, env: &mut Environment) -> Result<Value, ParsingError> {
         match self {
             Expr::Variable(v) => env
                 .get(v)
@@ -39,7 +42,7 @@ impl Expr {
                 }
             }
             Expr::Assign(name, expr) => {
-                if !env.0.contains_key(name) {
+                if !env.contains(name) {
                     return Result::Err(ParsingError::VariableNotFound(name.clone()));
                 }
                 let value = expr.eval(env)?;
