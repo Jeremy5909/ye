@@ -1,5 +1,3 @@
-use core::panic;
-
 use crate::Parser;
 use crate::parser::Expr;
 use crate::token::Token;
@@ -18,7 +16,7 @@ impl Parser {
                     let name = if let Some(Token::Identifier(name)) = self.peek() {
                         name.clone()
                     } else {
-                        panic!("Expected identifier after 'let'")
+                        return Err(ParsingError::ExpectedIdentifier);
                     };
                     self.advance();
                     if let Some(Token::Equal) = self.peek() {
@@ -26,7 +24,7 @@ impl Parser {
                         let expr = self.parse_expr()?;
                         Ok(Statement::Let(name, expr))
                     } else {
-                        Err(ParsingError::ExpectedToken)
+                        Err(ParsingError::ExpectedToken(Token::Equal))
                     }
                 }
                 _ => Ok(Statement::Expr(self.parse_expr()?)),
@@ -46,7 +44,7 @@ impl Parser {
                 let value_expr = self.parse_assignment()?;
                 return Ok(Expr::Assign(name, Box::new(value_expr)));
             } else {
-                panic!("Invalid assignment");
+                return Err(ParsingError::UnexpectedToken(Token::Equal));
             }
         }
         Ok(expr)
@@ -93,7 +91,7 @@ impl Parser {
                         _ => Err(ParsingError::UncompletedParenthesis),
                     }
                 }
-                _ => Err(ParsingError::UnexpectedToken),
+                _ => Err(ParsingError::UnexpectedToken(tok.clone())),
             }
         } else {
             Err(ParsingError::UnexpectedEndOfInput)

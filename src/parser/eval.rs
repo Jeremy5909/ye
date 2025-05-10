@@ -21,10 +21,10 @@ impl Enviroment {
 impl Expr {
     pub fn eval(&self, env: &mut Enviroment) -> Result<Value, ParsingError> {
         match self {
-            Expr::Variable(v) => Ok(env
+            Expr::Variable(v) => env
                 .get(v)
-                .unwrap_or_else(|| panic!("Undefined variable: {}", v))
-                .clone()),
+                .cloned()
+                .ok_or(ParsingError::VariableNotFound(v.clone())),
             Expr::Literal(v) => Ok(v.clone()),
             Expr::Binary(left, op, right) => {
                 let l = left.eval(env);
@@ -40,9 +40,8 @@ impl Expr {
             }
             Expr::Assign(name, expr) => {
                 if !env.0.contains_key(name) {
-                    return Result::Err(ParsingError::VariableNotFound);
+                    return Result::Err(ParsingError::VariableNotFound(name.clone()));
                 }
-
                 let value = expr.eval(env)?;
                 env.set(name.to_owned(), value.clone());
                 Ok(value)
