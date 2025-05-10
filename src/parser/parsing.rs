@@ -4,13 +4,13 @@ use crate::Parser;
 use crate::parser::Expr;
 use crate::token::Token;
 
-use super::{Statement, Value};
+use super::{Statement, Value, error::ParsingError};
 
 impl Parser {
-    pub fn parse(&mut self) -> Statement {
+    pub fn parse(&mut self) -> Result<Statement, ParsingError> {
         self.parse_statement()
     }
-    fn parse_statement(&mut self) -> Statement {
+    fn parse_statement(&mut self) -> Result<Statement, ParsingError> {
         if let Some(stmt) = self.peek() {
             match stmt {
                 Token::Let => {
@@ -23,80 +23,80 @@ impl Parser {
                     self.advance();
                     if let Some(Token::Equal) = self.peek() {
                         self.advance();
-                        let expr = self.parse_expr();
-                        Statement::Let(name, expr)
+                        let expr = self.parse_expr()?;
+                        Ok(Statement::Let(name, expr))
                     } else {
-                        panic!("Expected '='")
+                        Err(ParsingError::ExpectedToken)
                     }
                 }
-                _ => Statement::Expr(self.parse_expr()),
+                _ => Ok(Statement::Expr(self.parse_expr()?)),
             }
         } else {
-            Statement::Expr(self.parse_expr())
+            Ok(Statement::Expr(self.parse_expr()?))
         }
     }
-    fn parse_expr(&mut self) -> Expr {
+    fn parse_expr(&mut self) -> Result<Expr, ParsingError> {
         self.parse_assignment()
     }
-    fn parse_assignment(&mut self) -> Expr {
-        let expr = self.parse_term();
+    fn parse_assignment(&mut self) -> Result<Expr, ParsingError> {
+        let expr = self.parse_term()?;
         if let Some(Token::Equal) = self.peek() {
             self.advance();
             if let Expr::Variable(name) = expr {
-                let value_expr = self.parse_assignment();
-                return Expr::Assign(name, Box::new(value_expr));
+                let value_expr = self.parse_assignment()?;
+                return Ok(Expr::Assign(name, Box::new(value_expr)));
             } else {
                 panic!("Invalid assignment");
             }
         }
-        expr
+        Ok(expr)
     }
-    fn parse_term(&mut self) -> Expr {
-        let mut expr = self.parse_factor();
+    fn parse_term(&mut self) -> Result<Expr, ParsingError> {
+        let mut expr = self.parse_factor()?;
         while let Some(tok) = self.peek() {
             match tok {
                 Token::Add | Token::Sub => {
                     let op = self.advance().unwrap().clone();
-                    let right = self.parse_factor();
+                    let right = self.parse_factor()?;
                     expr = Expr::Binary(Box::new(expr), op, Box::new(right));
                 }
                 _ => break,
             }
         }
-        expr
+        Ok(expr)
     }
-    fn parse_factor(&mut self) -> Expr {
-        let mut expr = self.parse_primary();
+    fn parse_factor(&mut self) -> Result<Expr, ParsingError> {
+        let mut expr = self.parse_primary()?;
         while let Some(tok) = self.peek() {
             match tok {
                 Token::Mult | Token::Div => {
                     let op = self.advance().unwrap().clone();
-                    let right = self.parse_primary();
+                    let right = self.parse_primary()?;
                     expr = Expr::Binary(Box::new(expr), op, Box::new(right));
                 }
                 _ => break,
             }
         }
-        expr
+        Ok(expr)
     }
-    fn parse_primary(&mut self) -> Expr {
+    fn parse_primary(&mut self) -> Result<Expr, ParsingError> {
         if let Some(tok) = self.advance() {
             match tok {
-                Token::Float(n) => Expr::Literal(Value::Number(*n)),
-                Token::Str(s) => Expr::Literal(Value::Str(s.clone())),
-                Token::Bool(b) => Expr::Literal(Value::Bool(*b)),
-                Token::Identifier(name) => Expr::Variable(name.clone()),
+                Token::Float(n) => Ok(Expr::Literal(Value::Number(*n))),
+                Token::Str(s) => Ok(Expr::Literal(Value::Str(s.clone()))),
+                Token::Bool(b) => Ok(Expr::Literal(Value::Bool(*b))),
+                Token::Identifier(name) => Ok(Expr::Variable(name.clone())),
                 Token::LParen => {
-                    let expr = self.parse_expr();
+                    let expr = self.parse_expr()?;
                     match self.advance() {
-                        Some(Token::RParen) => expr,
-                        _ => panic!("Expected ')'"),
+                        Some(Token::RParen) => Ok(expr),
+                        _ => Err(ParsingError::UncompletedParenthesis),
                     }
                 }
-                _ => panic!("Unexpected token: {:?}", tok),
+                _ => Err(ParsingError::UnexpectedToken),
             }
         } else {
-            panic!("Unexpected end of input");
+            Err(ParsingError::UnexpectedEndOfInput)
         }
     }
 }

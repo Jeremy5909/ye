@@ -32,7 +32,7 @@ fn read_line(line: String, env: &mut Enviroment, dbg: bool) {
     }
 
     let mut parser = Parser::new(scanner.tokens);
-    let stmt = parser.parse();
+    let stmt = parser.parse().unwrap();
     if dbg {
         if let Some(val) = stmt.eval(env).unwrap() {
             println!("Value: {val:#?}\n");
