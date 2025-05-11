@@ -6,6 +6,7 @@ use parser::{Parser, eval::Environment};
 mod inp_handling;
 mod parser;
 mod scanner;
+mod tests;
 mod token;
 
 fn main() {

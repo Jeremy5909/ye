@@ -11,9 +11,9 @@ use crate::{
 pub fn read_file(file_name: &str, env: &mut Environment) {
     let file = fs::read_to_string(file_name).expect("File not found");
     let lines: Vec<_> = file.lines().collect();
-    for line in lines.iter() {
-        read_line(line.to_string(), env, false)
-    }
+    lines
+        .iter()
+        .for_each(|line| read_line(line.to_string(), env, false));
 }
 
 pub fn read_input(env: &mut Environment, dbg: bool) {
@@ -24,7 +24,11 @@ pub fn read_input(env: &mut Environment, dbg: bool) {
     read_line(inp, env, dbg);
 }
 
-fn read_line(line: String, env: &mut Environment, dbg: bool) {
+pub fn read_line(line: String, env: &mut Environment, dbg: bool) {
+    // todo have this be in scanner or wtv instead
+    if line.trim().is_empty() {
+        return;
+    }
     let mut scanner = Scanner::from(line.trim());
     scanner.scan_tokens();
     if dbg {

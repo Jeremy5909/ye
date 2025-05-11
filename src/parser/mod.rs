@@ -15,7 +15,7 @@ pub enum Expr {
     Assign(String, Box<Expr>),
 }
 
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, PartialEq)]
 pub enum Value {
     Number(f32),
     Str(String),

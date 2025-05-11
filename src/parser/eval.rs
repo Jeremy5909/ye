@@ -10,7 +10,7 @@ impl Environment {
     pub fn new() -> Self {
         Self::default()
     }
-    fn get(&self, name: &str) -> Option<&Value> {
+    pub fn get(&self, name: &str) -> Option<&Value> {
         self.0.get(name)
     }
     pub fn set(&mut self, name: String, value: Value) {

@@ -28,7 +28,4 @@ impl Scanner {
             keyword_map,
         }
     }
-    pub fn new() -> Self {
-        Self::from("")
-    }
 }
