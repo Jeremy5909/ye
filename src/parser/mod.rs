@@ -56,4 +56,23 @@ impl Parser {
     fn peek(&self) -> Option<&Token> {
         self.tokens.get(self.index)
     }
+    fn consume(&mut self, expected: Token) -> Result<(), ParsingError> {
+        match self.peek() {
+            Some(tok) if *tok == expected => {
+                self.advance();
+                Ok(())
+            }
+            _ => Err(ParsingError::ExpectedToken(expected)),
+        }
+    }
+    fn consume_id(&mut self) -> Result<String, ParsingError> {
+        match self.peek() {
+            Some(Token::Identifier(name)) => {
+                let name = name.clone();
+                self.advance();
+                Ok(name)
+            }
+            _ => Err(ParsingError::ExpectedIdentifier),
+        }
+    }
 }

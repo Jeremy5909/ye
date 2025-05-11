@@ -9,45 +9,27 @@ impl Parser {
         self.parse_statement()
     }
     fn parse_statement(&mut self) -> Result<Statement, ParsingError> {
-        if let Some(stmt) = self.peek() {
-            match stmt {
-                Token::Let => {
-                    self.advance();
-                    let name = if let Some(Token::Identifier(name)) = self.peek() {
-                        name.clone()
-                    } else {
-                        return Err(ParsingError::ExpectedIdentifier);
-                    };
-                    self.advance();
-                    if let Some(Token::Equal) = self.peek() {
-                        self.advance();
-                        let expr = self.parse_expr()?;
-                        Ok(Statement::Let(name, expr))
-                    } else {
-                        Err(ParsingError::ExpectedToken(Token::Equal))
-                    }
-                }
-                _ => Ok(Statement::Expr(self.parse_expr()?)),
-            }
-        } else {
-            Ok(Statement::Expr(self.parse_expr()?))
+        if self.consume(Token::Let).is_err() {
+            return Ok(Statement::Expr(self.parse_expr()?));
         }
+        let name = self.consume_id()?;
+        self.consume(Token::Equal)?;
+        let expr = self.parse_expr()?;
+        Ok(Statement::Let(name, expr))
     }
     fn parse_expr(&mut self) -> Result<Expr, ParsingError> {
         self.parse_assignment()
     }
     fn parse_assignment(&mut self) -> Result<Expr, ParsingError> {
         let expr = self.parse_term()?;
-        if let Some(Token::Equal) = self.peek() {
-            self.advance();
-            if let Expr::Variable(name) = expr {
-                let value_expr = self.parse_assignment()?;
-                Ok(Expr::Assign(name, Box::new(value_expr)))
-            } else {
-                Err(ParsingError::UnexpectedToken(Token::Equal))
-            }
+        if self.consume(Token::Equal).is_err() {
+            return Ok(expr);
+        }
+        if let Expr::Variable(name) = expr {
+            let value_expr = self.parse_assignment()?;
+            Ok(Expr::Assign(name, Box::new(value_expr)))
         } else {
-            Ok(expr)
+            Err(ParsingError::ExpectedVariable)
         }
     }
     fn parse_term(&mut self) -> Result<Expr, ParsingError> {

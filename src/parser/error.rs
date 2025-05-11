@@ -10,6 +10,7 @@ pub enum ParsingError {
     UnexpectedToken(Token),
     ExpectedIdentifier,
     ExpectedToken(Token),
+    ExpectedVariable,
 }
 impl Debug for ParsingError {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
