@@ -1,8 +1,10 @@
-use crate::Parser;
-use crate::parser::Expr;
 use crate::token::Token;
 
-use super::{Statement, Value, error::ParsingError};
+use super::{
+    Parser,
+    ast::{Expr, Statement, Value},
+    error::ParsingError,
+};
 
 impl Parser {
     pub fn parse(&mut self) -> Result<Statement, ParsingError> {
@@ -83,6 +85,26 @@ impl Parser {
                         Some(Token::RParen) => Ok(expr),
                         _ => Err(ParsingError::UncompletedParenthesis),
                     }
+                }
+                Token::Fn => {
+                    self.consume(Token::LParen)?;
+                    let mut params = Vec::new();
+                    if self.consume(Token::RParen).is_err() {
+                        loop {
+                            params.push(self.consume_id()?);
+                            if self.consume(Token::Comma).is_err() {
+                                self.consume(Token::RParen)?;
+                                break;
+                            }
+                        }
+                    }
+                    self.consume(Token::LBrace)?;
+                    let mut body = Vec::new();
+                    while self.peek() != Some(&Token::RBrace) {
+                        body.push(self.parse_statement()?);
+                    }
+                    self.consume(Token::RBrace)?;
+                    Ok(Expr::Function(params, body))
                 }
                 _ => Err(ParsingError::UnexpectedToken(tok.clone())),
             }

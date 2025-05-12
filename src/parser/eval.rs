@@ -2,7 +2,10 @@ use std::collections::HashMap;
 
 use crate::token::Token;
 
-use super::{Expr, Value, error::ParsingError};
+use super::{
+    ast::{Expr, Function, Value},
+    error::ParsingError,
+};
 
 #[derive(Default)]
 pub struct Environment(HashMap<String, Value>);
@@ -63,6 +66,10 @@ impl Expr {
                     _ => Err(ParsingError::InvalidOperands),
                 }
             }
+            Expr::Function(params, body) => Ok(Value::Function(Function {
+                params: params.clone(),
+                body: body.clone(),
+            })),
         }
     }
 }

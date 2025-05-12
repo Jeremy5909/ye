@@ -1,7 +1,7 @@
 use std::env;
 
 use inp_handling::{run_file, run_input};
-use parser::{Parser, eval::Environment};
+use parser::eval::Environment;
 
 mod inp_handling;
 mod parser;

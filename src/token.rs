@@ -9,6 +9,9 @@ pub enum Token {
 
     LParen,
     RParen,
+    LBrace,
+    RBrace,
+    Comma,
 
     For,
     If,

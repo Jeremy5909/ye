@@ -19,7 +19,7 @@ impl Debug for ParsingError {
             ParsingError::InvalidOperands => write!(f, "Invalid operands"),
             ParsingError::UnexpectedToken(tok) => write!(f, "Unexpected token: {tok:?}"),
             ParsingError::UnexpectedEndOfInput => write!(f, "Unexpected end of input"),
-            ParsingError::ExpectedToken(tok) => write!(f, "Unexpected token: {tok:?}"),
+            ParsingError::ExpectedToken(tok) => write!(f, "Expected token: {tok:?}"),
             ParsingError::ExpectedIdentifier => write!(f, "Expected identifier"),
             ParsingError::UncompletedParenthesis => write!(f, "Uncompleted parenthesis"),
             _ => f.write_str("An error has occured"),

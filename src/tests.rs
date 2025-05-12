@@ -1,11 +1,11 @@
 #[allow(unused_imports)]
-use crate::parser::Value;
-use crate::{inp_handling::run_line, parser::eval::Environment};
+use crate::parser::ast::Value;
+use crate::{inp_handling::run, parser::eval::Environment};
 
 #[allow(dead_code)]
 fn test(commands: &str, env: &mut Environment) {
     commands.lines().for_each(|line| {
-        run_line(line.to_string(), env, true);
+        run(line.to_string(), env, true);
     });
 }
 
@@ -63,4 +63,28 @@ fn string_addition() {
         *env.get("result").unwrap(),
         Value::Str("hello world!".to_string())
     )
+}
+
+#[test]
+fn empty_func() {
+    let mut env = Environment::new();
+    test("let func = fn() {}", &mut env)
+}
+
+#[test]
+fn one_param_empty_func() {
+    let mut env = Environment::new();
+    test("let func = fn(x) {}", &mut env)
+}
+
+#[test]
+fn two_param_empty_func() {
+    let mut env = Environment::new();
+    test("let func = fn(x, y) {}", &mut env)
+}
+
+#[test]
+fn two_param_addition_func() {
+    let mut env = Environment::new();
+    test("let func = fn(x, y) {x+y}", &mut env)
 }
