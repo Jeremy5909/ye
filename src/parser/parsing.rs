@@ -10,12 +10,26 @@ impl Parser {
     pub fn parse_all(&mut self) -> Result<Vec<Statement>, ParsingError> {
         let mut statements = Vec::new();
         while self.peek().is_some() {
-            statements.push(self.parse()?);
+            statements.push(self.parse_statement()?);
         }
         Ok(statements)
     }
-    pub fn parse(&mut self) -> Result<Statement, ParsingError> {
-        self.parse_statement()
+    fn parse_binary<F: Fn(&mut Self) -> Result<Expr, ParsingError>>(
+        &mut self,
+        parse_next: F,
+        valid_ops: &[Token],
+    ) -> Result<Expr, ParsingError> {
+        let mut expr = parse_next(self)?;
+        while let Some(tok) = self.peek() {
+            if valid_ops.contains(tok) {
+                let op = self.advance().unwrap().clone();
+                let right = parse_next(self)?;
+                expr = Expr::Binary(Box::new(expr), op, Box::new(right));
+            } else {
+                break;
+            }
+        }
+        Ok(expr)
     }
     fn parse_statement(&mut self) -> Result<Statement, ParsingError> {
         if self.consume(Token::Import).is_ok() {
@@ -47,65 +61,26 @@ impl Parser {
         }
     }
     fn parse_comparison(&mut self) -> Result<Expr, ParsingError> {
-        let mut expr = self.parse_term()?;
-        while let Some(tok) = self.peek() {
-            match tok {
-                Token::Greater
-                | Token::GreaterEqual
-                | Token::Less
-                | Token::LessEqual
-                | Token::And
-                | Token::Or => {
-                    let op = self.advance().unwrap().clone();
-                    let right = self.parse_term()?;
-                    expr = Expr::Binary(Box::new(expr), op, Box::new(right))
-                }
-                _ => break,
-            }
-        }
-        Ok(expr)
+        self.parse_binary(
+            Self::parse_term,
+            &[
+                Token::Greater,
+                Token::GreaterEqual,
+                Token::Less,
+                Token::LessEqual,
+                Token::And,
+                Token::Or,
+            ],
+        )
     }
     fn parse_term(&mut self) -> Result<Expr, ParsingError> {
-        let mut expr = self.parse_equality()?;
-        while let Some(tok) = self.peek() {
-            match tok {
-                Token::Add | Token::Sub => {
-                    let op = self.advance().unwrap().clone();
-                    let right = self.parse_equality()?;
-                    expr = Expr::Binary(Box::new(expr), op, Box::new(right));
-                }
-                _ => break,
-            }
-        }
-        Ok(expr)
+        self.parse_binary(Self::parse_equality, &[Token::Add, Token::Sub])
     }
     fn parse_equality(&mut self) -> Result<Expr, ParsingError> {
-        let mut expr = self.parse_factor()?;
-        while let Some(tok) = self.peek() {
-            match tok {
-                Token::EqualEqual | Token::NotEqual => {
-                    let op = self.advance().unwrap().clone();
-                    let right = self.parse_factor()?;
-                    expr = Expr::Binary(Box::new(expr), op, Box::new(right));
-                }
-                _ => break,
-            }
-        }
-        Ok(expr)
+        self.parse_binary(Self::parse_factor, &[Token::EqualEqual, Token::NotEqual])
     }
     fn parse_factor(&mut self) -> Result<Expr, ParsingError> {
-        let mut expr = self.parse_unary()?;
-        while let Some(tok) = self.peek() {
-            match tok {
-                Token::Mult | Token::Div => {
-                    let op = self.advance().unwrap().clone();
-                    let right = self.parse_call()?;
-                    expr = Expr::Binary(Box::new(expr), op, Box::new(right));
-                }
-                _ => break,
-            }
-        }
-        Ok(expr)
+        self.parse_binary(Self::parse_unary, &[Token::Mult, Token::Div])
     }
     fn parse_unary(&mut self) -> Result<Expr, ParsingError> {
         match self.peek() {
