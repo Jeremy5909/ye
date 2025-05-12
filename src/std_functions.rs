@@ -18,7 +18,7 @@ fn input(_: Vec<Value>) -> Result<Value, String> {
     stdin()
         .read_line(&mut buf)
         .map_err(|_| "Error getting input")?;
-    Ok(Value::Str(buf))
+    Ok(Value::Str(buf.trim_end().to_owned()))
 }
 fn prompt(args: Vec<Value>) -> Result<Value, String> {
     print(args.clone())?;
