@@ -160,7 +160,7 @@ fn factorial() {
           if number <= 0 {
             0
           } else {
-            if (number == 0) | (number == 1) {
+            if number == 0 | number == 1 {
               1
             } else {
               number * factorial(number-1)

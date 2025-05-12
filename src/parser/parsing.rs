@@ -54,8 +54,6 @@ impl Parser {
                 | Token::GreaterEqual
                 | Token::Less
                 | Token::LessEqual
-                | Token::NotEqual
-                | Token::EqualEqual
                 | Token::And
                 | Token::Or => {
                     let op = self.advance().unwrap().clone();
@@ -68,10 +66,24 @@ impl Parser {
         Ok(expr)
     }
     fn parse_term(&mut self) -> Result<Expr, ParsingError> {
-        let mut expr = self.parse_factor()?;
+        let mut expr = self.parse_equality()?;
         while let Some(tok) = self.peek() {
             match tok {
                 Token::Add | Token::Sub => {
+                    let op = self.advance().unwrap().clone();
+                    let right = self.parse_equality()?;
+                    expr = Expr::Binary(Box::new(expr), op, Box::new(right));
+                }
+                _ => break,
+            }
+        }
+        Ok(expr)
+    }
+    fn parse_equality(&mut self) -> Result<Expr, ParsingError> {
+        let mut expr = self.parse_factor()?;
+        while let Some(tok) = self.peek() {
+            match tok {
+                Token::EqualEqual | Token::NotEqual => {
                     let op = self.advance().unwrap().clone();
                     let right = self.parse_factor()?;
                     expr = Expr::Binary(Box::new(expr), op, Box::new(right));
