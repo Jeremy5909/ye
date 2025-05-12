@@ -1,24 +1,17 @@
 use inp_handling::{run_file, run_input};
-use parser::{ast::Value, environment::Environment};
+use parser::environment::Environment;
+use std_functions::add_functions;
 
 mod inp_handling;
 mod parser;
 mod scanner;
+mod std_functions;
 mod tests;
 mod token;
 
 fn main() {
     let mut env = Environment::new();
-    env.set(
-        "print".to_string(),
-        Value::NativeFunction(|args| {
-            for arg in args {
-                print!("{arg}");
-            }
-            println!();
-            Ok(Value::Bool(true))
-        }),
-    );
+    add_functions(&mut env);
 
     std::env::args().next();
     let flags: Vec<_> = std::env::args().filter(|f| f.starts_with("--")).collect();

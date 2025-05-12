@@ -30,8 +30,8 @@ impl Environment {
             None
         }
     }
-    pub fn set(&mut self, name: String, value: Value) {
-        self.values.insert(name, value);
+    pub fn set(&mut self, name: &str, value: Value) {
+        self.values.insert(name.to_owned(), value);
     }
     pub fn contains(&self, name: &str) -> bool {
         if self.values.contains_key(name) {

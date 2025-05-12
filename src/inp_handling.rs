@@ -23,8 +23,8 @@ pub fn run_input(env: &mut Environment, dbg: bool) {
         if stdin().read_line(&mut line).unwrap() == 0 {
             break;
         }
-        brace_depth += line.matches('{').count();
-        brace_depth -= line.matches('}').count();
+        brace_depth += line.matches(['{', '(']).count();
+        brace_depth -= line.matches(['}', ')']).count();
         inp.push_str(&line);
         if brace_depth == 0 && !inp.trim().is_empty() {
             break;

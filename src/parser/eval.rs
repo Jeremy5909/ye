@@ -47,7 +47,7 @@ impl Expr {
                     return Result::Err(ParsingError::VariableNotFound(name.clone()));
                 }
                 let value = expr.eval(env)?;
-                env.set(name.to_owned(), value.clone());
+                env.set(name, value.clone());
                 Ok(value)
             }
             Expr::Unary(op, expr) => {
@@ -79,7 +79,7 @@ impl Expr {
                         }
                         let mut local_env = env.new_child();
                         for (param, value) in params.into_iter().zip(args) {
-                            local_env.set(param, value);
+                            local_env.set(&param, value);
                         }
                         let mut result = None;
                         for stmt in body {

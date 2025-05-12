@@ -50,7 +50,7 @@ impl Statement {
         match self {
             Statement::Let(name, expr) => {
                 let value = expr.eval(env)?;
-                env.set(name.clone(), value);
+                env.set(name, value);
                 Ok(None)
             }
             Statement::Expr(expr) => expr.eval(env).map(Some),
