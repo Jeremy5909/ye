@@ -11,11 +11,14 @@ mod token;
 
 fn main() {
     let mut env = Environment::new();
-    if let Some(file_name) = env::args().nth(1) {
-        run_file(file_name.as_str(), &mut env);
+    env::args().next();
+    let flags: Vec<_> = env::args().filter(|f| f.starts_with("--")).collect();
+    let fp = env::args().filter(|f| !f.starts_with("--")).nth(1);
+
+    let dbg = flags.contains(&"--dbg".to_owned());
+    if let Some(fp) = fp {
+        run_file(&fp, &mut env, dbg);
     } else {
-        loop {
-            run_input(&mut env, true);
-        }
+        run_input(&mut env, dbg);
     }
 }
