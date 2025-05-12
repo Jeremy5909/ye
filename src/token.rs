@@ -13,6 +13,8 @@ pub enum Token {
     Greater,
     LessEqual,
     GreaterEqual,
+    And,
+    Or,
 
     LParen,
     RParen,

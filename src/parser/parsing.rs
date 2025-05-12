@@ -55,7 +55,9 @@ impl Parser {
                 | Token::Less
                 | Token::LessEqual
                 | Token::NotEqual
-                | Token::EqualEqual => {
+                | Token::EqualEqual
+                | Token::And
+                | Token::Or => {
                     let op = self.advance().unwrap().clone();
                     let right = self.parse_term()?;
                     expr = Expr::Binary(Box::new(expr), op, Box::new(right))

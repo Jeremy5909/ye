@@ -23,6 +23,8 @@ impl Expr {
                     (Value::Number(a), Value::Number(b), Token::Mult) => Ok(Value::Number(a * b)),
                     (Value::Number(a), Value::Number(b), Token::Div) => Ok(Value::Number(a / b)),
                     (Value::Number(a), Value::Number(b), Token::Less) => Ok(Value::Bool(a < b)),
+                    (Value::Bool(a), Value::Bool(b), Token::And) => Ok(Value::Bool(a & b)),
+                    (Value::Bool(a), Value::Bool(b), Token::Or) => Ok(Value::Bool(a || b)),
                     (Value::Number(a), Value::Number(b), Token::LessEqual) => {
                         Ok(Value::Bool(a <= b))
                     }

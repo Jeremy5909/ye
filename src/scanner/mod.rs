@@ -22,6 +22,8 @@ impl Scanner {
             ("false", Token::Bool(false)),
             ("import", Token::Import),
             ("else", Token::Else),
+            ("or", Token::Or),
+            ("and", Token::And),
         ]);
         Self {
             source: source.chars().collect(),

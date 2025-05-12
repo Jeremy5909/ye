@@ -106,7 +106,7 @@ fn anon_func() {
 }
 
 #[test]
-fn comparison() {
+fn num_comparison() {
     let mut env = Environment::new();
     test(
         "let a=3<5
@@ -117,4 +117,36 @@ fn comparison() {
     assert_eq!(*env.get("a").unwrap(), Value::Bool(true));
     assert_eq!(*env.get("b").unwrap(), Value::Bool(true));
     assert_eq!(*env.get("c").unwrap(), Value::Bool(true));
+}
+
+#[test]
+fn or_comparison() {
+    let mut env = Environment::new();
+    test(
+        "let a=false|false
+        let b=false|true
+        let c=true|false
+        let d=true|true",
+        &mut env,
+    );
+    assert_eq!(*env.get("a").unwrap(), Value::Bool(false));
+    assert_eq!(*env.get("b").unwrap(), Value::Bool(true));
+    assert_eq!(*env.get("c").unwrap(), Value::Bool(true));
+    assert_eq!(*env.get("d").unwrap(), Value::Bool(true));
+}
+
+#[test]
+fn and_comparison() {
+    let mut env = Environment::new();
+    test(
+        "let a=false&false
+        let b=false&true
+        let c=true&false
+        let d=true&true",
+        &mut env,
+    );
+    assert_eq!(*env.get("a").unwrap(), Value::Bool(false));
+    assert_eq!(*env.get("b").unwrap(), Value::Bool(false));
+    assert_eq!(*env.get("c").unwrap(), Value::Bool(false));
+    assert_eq!(*env.get("d").unwrap(), Value::Bool(true));
 }

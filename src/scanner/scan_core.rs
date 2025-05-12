@@ -17,6 +17,8 @@ impl Scanner {
                 ',' => Token::Comma,
                 '{' => Token::LBrace,
                 '}' => Token::RBrace,
+                '|' => Token::Or,
+                '&' => Token::And,
                 '=' => match self.peek() {
                     Some('=') => {
                         self.advance();
