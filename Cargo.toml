@@ -1,6 +1,6 @@
 [package]
-name = "ye"
-version = "0.1.0"
-edition = "2024"
+name = "nle"
+version = "0.1.1"
+edition = "2025"
 
 [dependencies]
