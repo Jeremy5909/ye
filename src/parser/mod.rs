@@ -2,6 +2,7 @@ use error::ParsingError;
 
 use crate::token::Token;
 pub mod ast;
+pub mod environment;
 mod error;
 pub mod eval;
 mod parsing;

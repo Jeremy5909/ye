@@ -4,7 +4,7 @@ use std::{
 };
 
 use crate::{
-    parser::{Parser, eval::Environment},
+    parser::{Parser, environment::Environment},
     scanner::Scanner,
 };
 

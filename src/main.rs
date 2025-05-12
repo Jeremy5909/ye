@@ -1,5 +1,5 @@
 use inp_handling::{run_file, run_input};
-use parser::eval::Environment;
+use parser::environment::Environment;
 
 mod inp_handling;
 mod parser;

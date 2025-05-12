@@ -1,6 +1,6 @@
 #[allow(unused_imports)]
 use crate::parser::ast::Value;
-use crate::{inp_handling::run, parser::eval::Environment};
+use crate::{inp_handling::run, parser::environment::Environment};
 
 #[allow(dead_code)]
 fn test(commands: &str, env: &mut Environment) {
