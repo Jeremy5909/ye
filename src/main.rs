@@ -1,5 +1,5 @@
 use inp_handling::{run_file, run_input};
-use parser::environment::Environment;
+use parser::{ast::Value, environment::Environment};
 
 mod inp_handling;
 mod parser;
@@ -9,6 +9,17 @@ mod token;
 
 fn main() {
     let mut env = Environment::new();
+    env.set(
+        "print".to_string(),
+        Value::NativeFunction(|args| {
+            for arg in args {
+                print!("{arg}");
+            }
+            println!();
+            Ok(Value::Bool(true))
+        }),
+    );
+
     std::env::args().next();
     let flags: Vec<_> = std::env::args().filter(|f| f.starts_with("--")).collect();
     let fp = std::env::args().filter(|f| !f.starts_with("--")).nth(1);

@@ -1,3 +1,5 @@
+use std::fmt;
+
 use crate::Environment;
 use crate::parser::ParsingError;
 use crate::token::Token;
@@ -19,6 +21,17 @@ pub enum Value {
     Str(String),
     Bool(bool),
     Function(Function),
+    NativeFunction(fn(Vec<Value>) -> Result<Value, String>),
+}
+impl fmt::Display for Value {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        match self {
+            Self::Number(n) => write!(f, "{n}",),
+            Self::Str(s) => write!(f, "{s}"),
+            Self::Bool(b) => write!(f, "{b}"),
+            _ => write!(f, "?"),
+        }
+    }
 }
 #[derive(Debug, PartialEq, Clone)]
 pub struct Function {

@@ -13,6 +13,7 @@ pub enum ParsingError {
     ExpectedVariable,
     NotCallable,
     WrongNumArgs(usize, usize),
+    NativeError(String),
 }
 impl Debug for ParsingError {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
@@ -30,6 +31,7 @@ impl Debug for ParsingError {
                 "That needs {num_parameters} parameters but you provided {num_args}"
             ),
             ParsingError::ExpectedVariable => write!(f, "Variable expected"),
+            ParsingError::NativeError(e) => write!(f, "Native error: '{e}'"),
         }
     }
 }
