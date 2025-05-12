@@ -42,4 +42,14 @@ impl Parser {
             _ => Err(ParsingError::ExpectedIdentifier),
         }
     }
+    pub fn consume_string(&mut self) -> Result<String, ParsingError> {
+        match self.peek() {
+            Some(Token::Str(string)) => {
+                let string = string.clone();
+                self.advance();
+                Ok(string)
+            }
+            _ => Err(ParsingError::ExpectedString),
+        }
+    }
 }

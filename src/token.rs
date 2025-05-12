@@ -17,6 +17,7 @@ pub enum Token {
     If,
     Fn,
     Let,
+    Import,
 
     Str(String),
     Float(f32),

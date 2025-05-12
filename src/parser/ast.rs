@@ -1,8 +1,8 @@
 use std::fmt;
 
-use crate::Environment;
 use crate::parser::ParsingError;
 use crate::token::Token;
+use crate::{Environment, inp_handling};
 
 #[derive(Debug, PartialEq, Clone)]
 pub enum Expr {
@@ -42,6 +42,7 @@ pub struct Function {
 pub enum Statement {
     Let(String, Expr),
     Expr(Expr),
+    Import(String),
 }
 impl Statement {
     pub fn eval(&self, env: &mut Environment) -> Result<Option<Value>, ParsingError> {
@@ -52,6 +53,12 @@ impl Statement {
                 Ok(None)
             }
             Statement::Expr(expr) => expr.eval(env).map(Some),
+            Statement::Import(path) => {
+                let code = std::fs::read_to_string(path)
+                    .map_err(|_| ParsingError::FileNotFound(path.to_owned()))?;
+                inp_handling::run(code, env, false);
+                Ok(None)
+            }
         }
     }
 }

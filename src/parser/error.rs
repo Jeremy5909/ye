@@ -9,11 +9,13 @@ pub enum ParsingError {
     UncompletedParenthesis,
     UnexpectedToken(Token),
     ExpectedIdentifier,
+    ExpectedString,
     ExpectedToken(Token),
     ExpectedVariable,
     NotCallable,
     WrongNumArgs(usize, usize),
     NativeError(String),
+    FileNotFound(String),
 }
 impl Debug for ParsingError {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
@@ -24,6 +26,7 @@ impl Debug for ParsingError {
             ParsingError::UnexpectedEndOfInput => write!(f, "Unexpected end of input"),
             ParsingError::ExpectedToken(tok) => write!(f, "Expected token: {tok:?}"),
             ParsingError::ExpectedIdentifier => write!(f, "Expected identifier"),
+            ParsingError::ExpectedString => write!(f, "Expected string"),
             ParsingError::UncompletedParenthesis => write!(f, "Uncompleted parenthesis"),
             ParsingError::NotCallable => write!(f, "That is not callable"),
             ParsingError::WrongNumArgs(num_args, num_parameters) => write!(
@@ -32,6 +35,7 @@ impl Debug for ParsingError {
             ),
             ParsingError::ExpectedVariable => write!(f, "Variable expected"),
             ParsingError::NativeError(e) => write!(f, "Native error: '{e}'"),
+            ParsingError::FileNotFound(path) => write!(f, "File '{path}' not found"),
         }
     }
 }
