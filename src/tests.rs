@@ -1,11 +1,11 @@
 #[allow(unused_imports)]
 use crate::parser::Value;
-use crate::{inp_handling::read_line, parser::eval::Environment};
+use crate::{inp_handling::run_line, parser::eval::Environment};
 
 #[allow(dead_code)]
 fn test(commands: &str, env: &mut Environment) {
     commands.lines().for_each(|line| {
-        read_line(line.to_string(), env, true);
+        run_line(line.to_string(), env, true);
     });
 }
 

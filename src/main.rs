@@ -1,6 +1,6 @@
 use std::env;
 
-use inp_handling::{read_file, read_input};
+use inp_handling::{run_file, run_input};
 use parser::{Parser, eval::Environment};
 
 mod inp_handling;
@@ -12,10 +12,10 @@ mod token;
 fn main() {
     let mut env = Environment::new();
     if let Some(file_name) = env::args().nth(1) {
-        read_file(file_name.as_str(), &mut env);
+        run_file(file_name.as_str(), &mut env);
     } else {
         loop {
-            read_input(&mut env, true);
+            run_input(&mut env, true);
         }
     }
 }

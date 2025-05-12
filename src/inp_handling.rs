@@ -8,23 +8,23 @@ use crate::{
     scanner::Scanner,
 };
 
-pub fn read_file(file_name: &str, env: &mut Environment) {
+pub fn run_file(file_name: &str, env: &mut Environment) {
     let file = fs::read_to_string(file_name).expect("File not found");
     let lines: Vec<_> = file.lines().collect();
     lines
         .iter()
-        .for_each(|line| read_line(line.to_string(), env, false));
+        .for_each(|line| run_line(line.to_string(), env, false));
 }
 
-pub fn read_input(env: &mut Environment, dbg: bool) {
+pub fn run_input(env: &mut Environment, dbg: bool) {
     let mut inp = String::new();
     print!("> ");
     stdout().flush().unwrap();
     stdin().read_line(&mut inp).unwrap();
-    read_line(inp, env, dbg);
+    run_line(inp, env, dbg);
 }
 
-pub fn read_line(line: String, env: &mut Environment, dbg: bool) {
+pub fn run_line(line: String, env: &mut Environment, dbg: bool) {
     // todo have this be in scanner or wtv instead
     if line.trim().is_empty() {
         return;
