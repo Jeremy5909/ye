@@ -150,3 +150,36 @@ fn and_comparison() {
     assert_eq!(*env.get("c").unwrap(), Value::Bool(false));
     assert_eq!(*env.get("d").unwrap(), Value::Bool(true));
 }
+
+#[test]
+fn factorial() {
+    let mut env = Environment::new();
+    test(
+        "
+        let factorial = fn(number) {
+          if number <= 0 {
+            0
+          } else {
+            if (number == 0) | (number == 1) {
+              1
+            } else {
+              number * factorial(number-1)
+            }
+          }
+        }
+        let a = factorial(-2)
+        let b = factorial(-1)
+        let c = factorial(0)
+        let d = factorial(1)
+        let e = factorial(2)
+        let f = factorial(3)
+            ",
+        &mut env,
+    );
+    assert_eq!(*env.get("a").unwrap(), Value::Number(0.0));
+    assert_eq!(*env.get("b").unwrap(), Value::Number(0.0));
+    assert_eq!(*env.get("c").unwrap(), Value::Number(0.0));
+    assert_eq!(*env.get("d").unwrap(), Value::Number(1.0));
+    assert_eq!(*env.get("e").unwrap(), Value::Number(2.0));
+    assert_eq!(*env.get("f").unwrap(), Value::Number(6.0));
+}
