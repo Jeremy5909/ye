@@ -4,9 +4,7 @@ use crate::{inp_handling::run, parser::eval::Environment};
 
 #[allow(dead_code)]
 fn test(commands: &str, env: &mut Environment) {
-    commands.lines().for_each(|line| {
-        run(line.to_string(), env, true);
-    });
+    run(commands.to_owned(), env, true)
 }
 
 #[test]
@@ -72,19 +70,37 @@ fn empty_func() {
 }
 
 #[test]
-fn one_param_empty_func() {
+fn one_inp_func() {
     let mut env = Environment::new();
-    test("let func = fn(x) {}", &mut env)
+    test(
+        "let square = fn(x) {
+            x*x
+        }
+        let result = square(3)",
+        &mut env,
+    );
+    assert_eq!(*env.get("result").unwrap(), Value::Number(9.0));
 }
 
 #[test]
-fn two_param_empty_func() {
+fn two_inp_func() {
     let mut env = Environment::new();
-    test("let func = fn(x, y) {}", &mut env)
+    test(
+        "let add = fn(x, y) {
+            x+y
+        }
+        let result = add(4,7)",
+        &mut env,
+    );
+    assert_eq!(*env.get("result").unwrap(), Value::Number(11.0));
 }
 
 #[test]
-fn two_param_addition_func() {
+fn anon_func() {
     let mut env = Environment::new();
-    test("let func = fn(x, y) {x+y}", &mut env)
+    test(
+        "let s = fn(string){string+\" \"+string}(\"hello\")",
+        &mut env,
+    );
+    assert_eq!(*env.get("s").unwrap(), Value::Str("hello hello".to_owned()));
 }

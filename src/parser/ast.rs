@@ -10,6 +10,7 @@ pub enum Expr {
     Unary(Token, Box<Expr>),
     Assign(String, Box<Expr>),
     Function(Vec<String>, Vec<Statement>),
+    Call(Box<Expr>, Vec<Expr>),
 }
 
 #[derive(Debug, Clone, PartialEq)]

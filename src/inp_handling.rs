@@ -15,10 +15,22 @@ pub fn run_file(file_name: &str, env: &mut Environment, dbg: bool) {
 
 pub fn run_input(env: &mut Environment, dbg: bool) {
     let mut inp = String::new();
-    print!("> ");
-    stdout().flush().unwrap();
-    stdin().read_line(&mut inp).unwrap();
-    run(inp, env, dbg);
+    let mut brace_depth = 0;
+    loop {
+        print!("> ");
+        stdout().flush().unwrap();
+        let mut line = String::new();
+        if stdin().read_line(&mut line).unwrap() == 0 {
+            break;
+        }
+        brace_depth += line.matches('{').count();
+        brace_depth -= line.matches('}').count();
+        inp.push_str(&line);
+        if brace_depth == 0 && !inp.trim().is_empty() {
+            break;
+        }
+    }
+    run(inp, env, dbg)
 }
 
 pub fn run(inp: String, env: &mut Environment, dbg: bool) {
@@ -33,10 +45,14 @@ pub fn run(inp: String, env: &mut Environment, dbg: bool) {
         println!("Tokens:\n{:#?}\n\n", scanner.tokens);
     }
     let mut parser = Parser::new(scanner.tokens);
-    let stmt = parser.parse().unwrap();
-    if dbg {
-        if let Some(val) = stmt.eval(env).unwrap() {
-            println!("Value: {val:#?}\n");
+    let stmts = parser.parse_all().unwrap();
+    for stmt in stmts {
+        if dbg {
+            if let Some(val) = stmt.eval(env).unwrap() {
+                println!("Value: {val:#?}");
+            }
+        } else {
+            stmt.eval(env).unwrap();
         }
     }
 }

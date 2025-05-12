@@ -11,6 +11,8 @@ pub enum ParsingError {
     ExpectedIdentifier,
     ExpectedToken(Token),
     ExpectedVariable,
+    NotCallable,
+    WrongNumArgs(usize, usize),
 }
 impl Debug for ParsingError {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
@@ -22,7 +24,12 @@ impl Debug for ParsingError {
             ParsingError::ExpectedToken(tok) => write!(f, "Expected token: {tok:?}"),
             ParsingError::ExpectedIdentifier => write!(f, "Expected identifier"),
             ParsingError::UncompletedParenthesis => write!(f, "Uncompleted parenthesis"),
-            _ => f.write_str("An error has occured"),
+            ParsingError::NotCallable => write!(f, "That is not callable"),
+            ParsingError::WrongNumArgs(num_args, num_parameters) => write!(
+                f,
+                "That needs {num_parameters} parameters but you provided {num_args}"
+            ),
+            ParsingError::ExpectedVariable => write!(f, "Variable expected"),
         }
     }
 }

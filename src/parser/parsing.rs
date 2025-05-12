@@ -7,6 +7,13 @@ use super::{
 };
 
 impl Parser {
+    pub fn parse_all(&mut self) -> Result<Vec<Statement>, ParsingError> {
+        let mut statements = Vec::new();
+        while self.peek().is_some() {
+            statements.push(self.parse()?);
+        }
+        Ok(statements)
+    }
     pub fn parse(&mut self) -> Result<Statement, ParsingError> {
         self.parse_statement()
     }
@@ -54,7 +61,7 @@ impl Parser {
             match tok {
                 Token::Mult | Token::Div => {
                     let op = self.advance().unwrap().clone();
-                    let right = self.parse_primary()?;
+                    let right = self.parse_call()?;
                     expr = Expr::Binary(Box::new(expr), op, Box::new(right));
                 }
                 _ => break,
@@ -66,11 +73,31 @@ impl Parser {
         match self.peek() {
             Some(Token::Not) | Some(Token::Sub) => {
                 let op = self.advance().unwrap().clone();
-                let right = self.parse_unary()?;
+                let right = self.parse_call()?;
                 Ok(Expr::Unary(op, Box::new(right)))
             }
-            _ => self.parse_primary(),
+            _ => self.parse_call(),
         }
+    }
+    fn parse_call(&mut self) -> Result<Expr, ParsingError> {
+        let mut expr = self.parse_primary()?;
+        loop {
+            if self.consume(Token::LParen).is_err() {
+                break;
+            }
+            let mut args = Vec::new();
+            if self.consume(Token::RParen).is_err() {
+                loop {
+                    args.push(self.parse_expr()?);
+                    if self.consume(Token::Comma).is_err() {
+                        self.consume(Token::RParen)?;
+                        break;
+                    }
+                }
+            }
+            expr = Expr::Call(Box::new(expr), args)
+        }
+        Ok(expr)
     }
     fn parse_primary(&mut self) -> Result<Expr, ParsingError> {
         if let Some(tok) = self.advance() {
