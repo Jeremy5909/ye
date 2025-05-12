@@ -22,6 +22,20 @@ impl Expr {
                     (Value::Number(a), Value::Number(b), Token::Sub) => Ok(Value::Number(a - b)),
                     (Value::Number(a), Value::Number(b), Token::Mult) => Ok(Value::Number(a * b)),
                     (Value::Number(a), Value::Number(b), Token::Div) => Ok(Value::Number(a / b)),
+                    (Value::Number(a), Value::Number(b), Token::Less) => Ok(Value::Bool(a < b)),
+                    (Value::Number(a), Value::Number(b), Token::LessEqual) => {
+                        Ok(Value::Bool(a <= b))
+                    }
+                    (Value::Number(a), Value::Number(b), Token::Greater) => Ok(Value::Bool(a > b)),
+                    (Value::Number(a), Value::Number(b), Token::GreaterEqual) => {
+                        Ok(Value::Bool(a >= b))
+                    }
+                    (Value::Number(a), Value::Number(b), Token::EqualEqual) => {
+                        Ok(Value::Bool(a == b))
+                    }
+                    (Value::Number(a), Value::Number(b), Token::NotEqual) => {
+                        Ok(Value::Bool(a != b))
+                    }
                     (Value::Str(a), Value::Str(b), Token::Add) => Ok(Value::Str(a + b.as_str())),
                     _ => Result::Err(ParsingError::InvalidOperands),
                 }

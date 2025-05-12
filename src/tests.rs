@@ -104,3 +104,17 @@ fn anon_func() {
     );
     assert_eq!(*env.get("s").unwrap(), Value::Str("hello hello".to_owned()));
 }
+
+#[test]
+fn comparison() {
+    let mut env = Environment::new();
+    test(
+        "let a=3<5
+        let b=5>3
+        let c=3<=3",
+        &mut env,
+    );
+    assert_eq!(*env.get("a").unwrap(), Value::Bool(true));
+    assert_eq!(*env.get("b").unwrap(), Value::Bool(true));
+    assert_eq!(*env.get("c").unwrap(), Value::Bool(true));
+}

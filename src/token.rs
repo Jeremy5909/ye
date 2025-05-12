@@ -6,6 +6,13 @@ pub enum Token {
     Div,
     Equal,
     Not,
+    NotEqual,
+
+    EqualEqual,
+    Less,
+    Greater,
+    LessEqual,
+    GreaterEqual,
 
     LParen,
     RParen,

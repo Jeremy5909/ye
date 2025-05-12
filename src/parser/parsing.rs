@@ -35,7 +35,7 @@ impl Parser {
         self.parse_assignment()
     }
     fn parse_assignment(&mut self) -> Result<Expr, ParsingError> {
-        let expr = self.parse_term()?;
+        let expr = self.parse_comparison()?;
         if self.consume(Token::Equal).is_err() {
             return Ok(expr);
         }
@@ -45,6 +45,25 @@ impl Parser {
         } else {
             Err(ParsingError::ExpectedVariable)
         }
+    }
+    fn parse_comparison(&mut self) -> Result<Expr, ParsingError> {
+        let mut expr = self.parse_term()?;
+        while let Some(tok) = self.peek() {
+            match tok {
+                Token::Greater
+                | Token::GreaterEqual
+                | Token::Less
+                | Token::LessEqual
+                | Token::NotEqual
+                | Token::EqualEqual => {
+                    let op = self.advance().unwrap().clone();
+                    let right = self.parse_term()?;
+                    expr = Expr::Binary(Box::new(expr), op, Box::new(right))
+                }
+                _ => break,
+            }
+        }
+        Ok(expr)
     }
     fn parse_term(&mut self) -> Result<Expr, ParsingError> {
         let mut expr = self.parse_factor()?;

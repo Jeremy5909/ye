@@ -17,8 +17,34 @@ impl Scanner {
                 ',' => Token::Comma,
                 '{' => Token::LBrace,
                 '}' => Token::RBrace,
-                '=' => Token::Equal,
-                '!' => Token::Not,
+                '=' => match self.peek() {
+                    Some('=') => {
+                        self.advance();
+                        Token::EqualEqual
+                    }
+                    _ => Token::Equal,
+                },
+                '>' => match self.peek() {
+                    Some('=') => {
+                        self.advance();
+                        Token::GreaterEqual
+                    }
+                    _ => Token::Greater,
+                },
+                '<' => match self.peek() {
+                    Some('=') => {
+                        self.advance();
+                        Token::LessEqual
+                    }
+                    _ => Token::Less,
+                },
+                '!' => match self.peek() {
+                    Some('=') => {
+                        self.advance();
+                        Token::NotEqual
+                    }
+                    _ => Token::Not,
+                },
                 '"' => self.scan_string().unwrap(),
                 _ => {
                     if next.is_numeric() || next == '.' {
