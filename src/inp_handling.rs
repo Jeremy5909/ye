@@ -8,12 +8,9 @@ use crate::{
     scanner::Scanner,
 };
 
-pub fn run_file(file_name: &str, env: &mut Environment) {
+pub fn run_file(file_name: &str, env: &mut Environment, dbg: bool) {
     let file = fs::read_to_string(file_name).expect("File not found");
-    let lines: Vec<_> = file.lines().collect();
-    lines
-        .iter()
-        .for_each(|line| run_line(line.to_string(), env, false));
+    run(file, env, dbg);
 }
 
 pub fn run_input(env: &mut Environment, dbg: bool) {
@@ -21,20 +18,20 @@ pub fn run_input(env: &mut Environment, dbg: bool) {
     print!("> ");
     stdout().flush().unwrap();
     stdin().read_line(&mut inp).unwrap();
-    run_line(inp, env, dbg);
+    run(inp, env, dbg);
 }
 
-pub fn run_line(line: String, env: &mut Environment, dbg: bool) {
+pub fn run(inp: String, env: &mut Environment, dbg: bool) {
+    let inp = inp.trim();
     // todo have this be in scanner or wtv instead
-    if line.trim().is_empty() {
+    if inp.is_empty() {
         return;
     }
-    let mut scanner = Scanner::from(line.trim());
+    let mut scanner = Scanner::from(inp);
     scanner.scan_tokens();
     if dbg {
-        println!("Tokens:\n{:?}\n\n", scanner.tokens);
+        println!("Tokens:\n{:#?}\n\n", scanner.tokens);
     }
-
     let mut parser = Parser::new(scanner.tokens);
     let stmt = parser.parse().unwrap();
     if dbg {
