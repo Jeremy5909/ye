@@ -21,6 +21,7 @@ impl Scanner {
             ("true", Token::Bool(true)),
             ("false", Token::Bool(false)),
             ("import", Token::Import),
+            ("else", Token::Else),
         ]);
         Self {
             source: source.chars().collect(),

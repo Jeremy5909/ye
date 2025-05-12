@@ -138,6 +138,29 @@ impl Parser {
                     self.consume(Token::RBrace)?;
                     Ok(Expr::Function(params, body))
                 }
+                Token::If => {
+                    let condition = self.parse_expr()?;
+                    self.consume(Token::LBrace)?;
+                    let mut then_branch = Vec::new();
+                    while self.peek() != Some(&Token::RBrace) {
+                        then_branch.push(self.parse_statement()?);
+                    }
+                    self.consume(Token::RBrace)?;
+
+                    let else_branch = if self.consume(Token::Else).is_ok() {
+                        self.consume(Token::LBrace)?;
+                        let mut else_branch = Vec::new();
+                        while self.peek() != Some(&Token::RBrace) {
+                            else_branch.push(self.parse_statement()?);
+                        }
+                        self.consume(Token::RBrace)?;
+                        Some(else_branch)
+                    } else {
+                        None
+                    };
+
+                    Ok(Expr::If(Box::new(condition), then_branch, else_branch))
+                }
                 _ => Err(ParsingError::UnexpectedToken(tok.clone())),
             }
         } else {

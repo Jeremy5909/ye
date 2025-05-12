@@ -13,6 +13,7 @@ pub enum Expr {
     Assign(String, Box<Expr>),
     Function(Vec<String>, Vec<Statement>),
     Call(Box<Expr>, Vec<Expr>),
+    If(Box<Expr>, Vec<Statement>, Option<Vec<Statement>>),
 }
 
 #[derive(Debug, Clone, PartialEq)]

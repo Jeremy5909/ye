@@ -12,6 +12,7 @@ pub enum ParsingError {
     ExpectedString,
     ExpectedToken(Token),
     ExpectedVariable,
+    ExpectedBoolean,
     NotCallable,
     WrongNumArgs(usize, usize),
     NativeError(String),
@@ -36,6 +37,7 @@ impl Debug for ParsingError {
             ParsingError::ExpectedVariable => write!(f, "Variable expected"),
             ParsingError::NativeError(e) => write!(f, "Native error: '{e}'"),
             ParsingError::FileNotFound(path) => write!(f, "File '{path}' not found"),
+            ParsingError::ExpectedBoolean => write!(f, "Expected boolean"),
         }
     }
 }

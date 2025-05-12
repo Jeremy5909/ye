@@ -75,6 +75,30 @@ impl Expr {
                     _ => Err(ParsingError::NotCallable),
                 }
             }
+            Expr::If(condition, then_branch, else_branch) => {
+                let cond = condition.eval(env)?;
+                match cond {
+                    Value::Bool(true) => {
+                        let mut result = None;
+                        for stmt in then_branch {
+                            result = stmt.eval(env)?;
+                        }
+                        Ok(result.unwrap_or(Value::Bool(false)))
+                    }
+                    Value::Bool(false) => {
+                        if let Some(else_branch) = else_branch {
+                            let mut result = None;
+                            for stmt in else_branch {
+                                result = stmt.eval(env)?;
+                            }
+                            Ok(result.unwrap_or(Value::Bool(false)))
+                        } else {
+                            Ok(Value::Bool(false))
+                        }
+                    }
+                    _ => Err(ParsingError::ExpectedBoolean),
+                }
+            }
         }
     }
 }

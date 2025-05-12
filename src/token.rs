@@ -15,6 +15,7 @@ pub enum Token {
 
     For,
     If,
+    Else,
     Fn,
     Let,
     Import,
