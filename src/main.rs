@@ -10,6 +10,7 @@ mod inp_handling;
 mod parser;
 mod scanner;
 mod std_functions;
+#[cfg(test)]
 mod tests;
 
 fn main() {
