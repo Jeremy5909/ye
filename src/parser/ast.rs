@@ -6,14 +6,15 @@ use crate::{Environment, inp_handling};
 
 #[derive(Debug, PartialEq, Clone)]
 pub enum Expr {
-    Literal(Value),
-    Variable(String),
-    Binary(Box<Expr>, Token, Box<Expr>),
-    Unary(Token, Box<Expr>),
-    Assign(String, Box<Expr>),
-    Function(Vec<String>, Vec<Statement>),
-    Call(Box<Expr>, Vec<Expr>),
-    If(Box<Expr>, Vec<Statement>, Option<Vec<Statement>>),
+    Literal(Value),                                        // 3.0
+    Variable(String),                                      // x
+    Binary(Box<Expr>, Token, Box<Expr>),                   // x+3.0
+    Unary(Token, Box<Expr>),                               // !true
+    Assign(String, Box<Expr>),                             // x=3
+    Function(Vec<String>, Vec<Statement>),                 // fn(x) {x}
+    Call(Box<Expr>, Vec<Expr>),                            // f()
+    If(Box<Expr>, Vec<Statement>, Option<Vec<Statement>>), // if (x) {..} else {..}
+    ArrayLiteral(Vec<Expr>),                               // [3, 5.0, true, "hi"]
 }
 
 #[derive(Debug, Clone, PartialEq)]
@@ -23,6 +24,7 @@ pub enum Value {
     Bool(bool),
     Function(Function),
     NativeFunction(fn(Vec<Value>) -> Result<Value, String>),
+    Array(Vec<Value>),
 }
 impl fmt::Display for Value {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
@@ -30,6 +32,7 @@ impl fmt::Display for Value {
             Self::Number(n) => write!(f, "{n}",),
             Self::Str(s) => write!(f, "{s}"),
             Self::Bool(b) => write!(f, "{b}"),
+            Self::Array(v) => write!(f, "{v:?}"),
             _ => write!(f, "?"),
         }
     }

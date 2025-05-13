@@ -169,6 +169,19 @@ impl Parser {
 
                     Ok(Expr::If(Box::new(condition), then_branch, else_branch))
                 }
+                Token::LBracket => {
+                    let mut arr = Vec::new();
+                    if self.consume(Token::RBracket).is_err() {
+                        loop {
+                            arr.push(self.parse_expr()?);
+                            if self.consume(Token::Comma).is_err() {
+                                self.consume(Token::RBracket)?;
+                                break;
+                            }
+                        }
+                    }
+                    Ok(Expr::ArrayLiteral(arr))
+                }
                 _ => Err(ParsingError::UnexpectedToken(tok.clone())),
             }
         } else {

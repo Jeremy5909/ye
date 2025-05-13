@@ -115,6 +115,13 @@ impl Expr {
                     _ => Err(ParsingError::ExpectedBoolean),
                 }
             }
+            Expr::ArrayLiteral(elements) => {
+                let mut arr = Vec::new();
+                for element in elements {
+                    arr.push(element.eval(env)?);
+                }
+                Ok(Value::Array(arr))
+            }
         }
     }
 }

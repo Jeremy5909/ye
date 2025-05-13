@@ -17,6 +17,8 @@ impl Scanner {
                 ',' => Token::Comma,
                 '{' => Token::LBrace,
                 '}' => Token::RBrace,
+                '[' => Token::LBracket,
+                ']' => Token::RBracket,
                 '|' => Token::Or,
                 '&' => Token::And,
                 '=' => match self.peek() {
