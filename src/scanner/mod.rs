@@ -1,8 +1,10 @@
 use std::collections::HashMap;
 
-use crate::token::Token;
+use token::Token;
+
 mod scan_core;
 mod scan_types;
+pub mod token;
 
 pub struct Scanner {
     source: Vec<char>,

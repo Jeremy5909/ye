@@ -1,10 +1,5 @@
-use error::ParsingError;
+use crate::{error::ParsingError, scanner::token::Token};
 
-use crate::token::Token;
-pub mod ast;
-pub mod environment;
-mod error;
-pub mod eval;
 mod parsing;
 
 pub struct Parser {

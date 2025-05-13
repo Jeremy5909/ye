@@ -1,6 +1,6 @@
 use std::io::{Write, stdin, stdout};
 
-use crate::parser::{ast::Value, environment::Environment};
+use crate::{ast::Value, environment::Environment};
 
 fn print(args: Vec<Value>) -> Result<Value, String> {
     for arg in args {

@@ -1,6 +1,4 @@
-use crate::token::Token;
-
-use super::Scanner;
+use super::{Scanner, token::Token};
 
 impl Scanner {
     pub(super) fn scan_string(&mut self) -> Result<Token, String> {

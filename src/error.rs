@@ -1,6 +1,5 @@
+use crate::scanner::token::Token;
 use std::fmt::Debug;
-
-use crate::token::Token;
 
 use super::ast::Value;
 

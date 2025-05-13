@@ -3,10 +3,7 @@ use std::{
     io::{Write, stdin, stdout},
 };
 
-use crate::{
-    parser::{Parser, environment::Environment},
-    scanner::Scanner,
-};
+use crate::{environment::Environment, parser::Parser, scanner::Scanner};
 
 pub fn run_file(file_name: &str, env: &mut Environment, dbg: bool) {
     let file = fs::read_to_string(file_name).expect("File not found");

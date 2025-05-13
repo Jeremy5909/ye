@@ -1,8 +1,7 @@
+use crate::error::ParsingError;
 use std::fmt;
 
-use crate::parser::ParsingError;
-use crate::token::Token;
-use crate::{Environment, inp_handling};
+use crate::{Environment, inp_handling, scanner::token::Token};
 
 #[derive(Debug, PartialEq, Clone)]
 pub enum Expr {

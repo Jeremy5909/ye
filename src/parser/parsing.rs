@@ -1,10 +1,10 @@
-use crate::token::Token;
-
-use super::{
-    Parser,
+use crate::{
     ast::{Expr, Statement, Value},
     error::ParsingError,
+    scanner::token::Token,
 };
+
+use super::Parser;
 
 impl Parser {
     pub fn parse_all(&mut self) -> Result<Vec<Statement>, ParsingError> {
