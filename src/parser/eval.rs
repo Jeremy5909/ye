@@ -134,6 +134,11 @@ impl Expr {
                         .get(i)
                         .cloned()
                         .ok_or(ParsingError::IndexOutOfBounds(i)),
+                    Value::Str(string) => string
+                        .chars()
+                        .map(|char| Value::Str(char.to_string()))
+                        .nth(i)
+                        .ok_or(ParsingError::IndexOutOfBounds(i)),
                     _ => Err(ParsingError::NotIndexable(arr)),
                 }
             }
