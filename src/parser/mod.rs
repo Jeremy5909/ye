@@ -1,6 +1,15 @@
-use crate::{error::ParsingError, scanner::token::Token};
+use crate::{
+    ast::{Expr, Statement},
+    error::ParsingError,
+    scanner::token::Token,
+};
 
-mod parsing;
+mod parse_assignment;
+mod parse_binary;
+mod parse_call;
+mod parse_primary;
+mod parse_statement;
+mod parse_unary;
 
 pub struct Parser {
     tokens: Vec<Token>,
@@ -46,5 +55,16 @@ impl Parser {
             }
             _ => Err(ParsingError::ExpectedString),
         }
+    }
+
+    pub fn parse_all(&mut self) -> Result<Vec<Statement>, ParsingError> {
+        let mut statements = Vec::new();
+        while self.peek().is_some() {
+            statements.push(self.parse_statement()?);
+        }
+        Ok(statements)
+    }
+    fn parse_expr(&mut self) -> Result<Expr, ParsingError> {
+        self.parse_assignment()
     }
 }
