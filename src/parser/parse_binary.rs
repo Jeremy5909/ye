@@ -20,6 +20,12 @@ impl Parser {
         Ok(expr)
     }
 
+    pub fn parse_equality(&mut self) -> Result<Expr, ParsingError> {
+        self.parse_binary(
+            Self::parse_comparison,
+            &[Token::EqualEqual, Token::NotEqual],
+        )
+    }
     pub fn parse_comparison(&mut self) -> Result<Expr, ParsingError> {
         self.parse_binary(
             Self::parse_term,
@@ -34,10 +40,7 @@ impl Parser {
         )
     }
     pub fn parse_term(&mut self) -> Result<Expr, ParsingError> {
-        self.parse_binary(Self::parse_equality, &[Token::Add, Token::Sub])
-    }
-    pub fn parse_equality(&mut self) -> Result<Expr, ParsingError> {
-        self.parse_binary(Self::parse_factor, &[Token::EqualEqual, Token::NotEqual])
+        self.parse_binary(Self::parse_factor, &[Token::Add, Token::Sub])
     }
     pub fn parse_factor(&mut self) -> Result<Expr, ParsingError> {
         self.parse_binary(Self::parse_unary, &[Token::Mult, Token::Div])
