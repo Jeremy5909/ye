@@ -3,7 +3,7 @@ use crate::{ast::Value, environment::Environment, runner::run};
 #[allow(unused_imports)]
 #[allow(dead_code)]
 fn test(commands: &str, env: &mut Environment) {
-    run(commands.to_owned(), env, true)
+    run(commands.to_owned(), env)
 }
 
 #[test]

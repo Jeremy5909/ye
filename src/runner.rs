@@ -5,12 +5,12 @@ use std::{
 
 use crate::{environment::Environment, parser::Parser, scanner::Scanner};
 
-pub fn run_file(file_name: &str, env: &mut Environment, dbg: bool) {
+pub fn run_file(file_name: &str, env: &mut Environment) {
     let file = fs::read_to_string(file_name).expect("File not found");
-    run(file, env, dbg);
+    run(file, env);
 }
 
-pub fn run_input(env: &mut Environment, dbg: bool) {
+pub fn run_input(env: &mut Environment) {
     let mut inp = String::new();
     let mut brace_depth = 0;
     loop {
@@ -27,25 +27,18 @@ pub fn run_input(env: &mut Environment, dbg: bool) {
             break;
         }
     }
-    run(inp, env, dbg)
+    run(inp, env)
 }
 
-pub fn run(inp: String, env: &mut Environment, dbg: bool) {
+pub fn run(inp: String, env: &mut Environment) {
     let inp = inp.trim();
     let mut scanner = Scanner::from(inp);
     scanner.scan_tokens();
-    if dbg {
-        println!("Tokens:\n{:#?}\n\n", scanner.tokens);
-    }
     let mut parser = Parser::new(scanner.tokens);
     let stmts = parser.parse_all().unwrap();
     for stmt in stmts {
-        if dbg {
-            if let Some(val) = stmt.eval(env).unwrap() {
-                println!("Value: {val:#?}");
-            }
-        } else {
-            stmt.eval(env).unwrap();
+        if let Some(val) = stmt.eval(env).unwrap() {
+            println!("{val}")
         }
     }
 }

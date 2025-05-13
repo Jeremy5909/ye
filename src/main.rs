@@ -21,12 +21,12 @@ fn main() {
     let args: Vec<_> = std::env::args().filter(|f| f.starts_with("--")).collect();
     let fp = std::env::args().filter(|f| !f.starts_with("--")).nth(1);
 
-    let dbg = args.contains(&"--dbg".to_owned());
+    // let dbg = args.contains(&"--dbg".to_owned());
     if let Some(fp) = fp {
-        run_file(&fp, &mut env, dbg);
+        run_file(&fp, &mut env);
     } else {
         loop {
-            run_input(&mut env, dbg);
+            run_input(&mut env);
         }
     }
 }
