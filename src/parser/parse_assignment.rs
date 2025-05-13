@@ -4,7 +4,7 @@ use super::Parser;
 
 impl Parser {
     pub fn parse_assignment(&mut self) -> Result<Expr, ParsingError> {
-        let expr = self.parse_equality()?;
+        let expr = self.parse_comparison()?;
         if self.consume(Token::Equal).is_err() {
             return Ok(expr);
         }
