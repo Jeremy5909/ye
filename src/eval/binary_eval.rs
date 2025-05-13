@@ -7,9 +7,9 @@ use crate::{
 
 pub fn eval_binary(
     env: &mut Environment,
-    left: &Box<Expr>,
+    left: &Expr,
     op: &Token,
-    right: &Box<Expr>,
+    right: &Expr,
 ) -> Result<Value, ParsingError> {
     let l = left.eval(env)?;
     let r = right.eval(env)?;

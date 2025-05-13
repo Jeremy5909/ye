@@ -5,11 +5,7 @@ use crate::{
     scanner::token::Token,
 };
 
-pub fn eval_unary(
-    env: &mut Environment,
-    op: &Token,
-    expr: &Box<Expr>,
-) -> Result<Value, ParsingError> {
+pub fn eval_unary(env: &mut Environment, op: &Token, expr: &Expr) -> Result<Value, ParsingError> {
     let value = expr.eval(env)?;
     match op {
         Token::Not => match value {

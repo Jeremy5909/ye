@@ -6,7 +6,7 @@ use crate::{
 
 pub fn eval_if(
     env: &mut Environment,
-    condition: &Box<Expr>,
+    condition: &Expr,
     then_branch: &Vec<crate::ast::Statement>,
     else_branch: &Option<Vec<crate::ast::Statement>>,
 ) -> Result<Value, ParsingError> {

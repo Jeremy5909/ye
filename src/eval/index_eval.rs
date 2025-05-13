@@ -4,11 +4,7 @@ use crate::{
     error::ParsingError,
 };
 
-pub fn eval_index(
-    env: &mut Environment,
-    arr: &Box<Expr>,
-    index: &Box<Expr>,
-) -> Result<Value, ParsingError> {
+pub fn eval_index(env: &mut Environment, arr: &Expr, index: &Expr) -> Result<Value, ParsingError> {
     let arr = arr.eval(env)?;
     let index = index.eval(env)?;
     let i = match index {

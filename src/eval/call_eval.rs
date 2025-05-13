@@ -4,11 +4,7 @@ use crate::{
     error::ParsingError,
 };
 
-pub fn eval_call(
-    env: &mut Environment,
-    expr: &Box<Expr>,
-    args: &Vec<Expr>,
-) -> Result<Value, ParsingError> {
+pub fn eval_call(env: &mut Environment, expr: &Expr, args: &[Expr]) -> Result<Value, ParsingError> {
     let func = expr.eval(env)?;
     let args: Result<Vec<_>, _> = args.iter().map(|arg| arg.eval(env)).collect();
     let args = args?;
