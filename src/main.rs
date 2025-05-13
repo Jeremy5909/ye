@@ -1,13 +1,13 @@
 use environment::Environment;
-use inp_handling::{run_file, run_input};
+use runner::{run_file, run_input};
 use std_functions::add_functions;
 
 mod ast;
 mod environment;
 mod error;
 mod eval;
-mod inp_handling;
 mod parser;
+mod runner;
 mod scanner;
 mod std_functions;
 #[cfg(test)]

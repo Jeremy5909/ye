@@ -1,7 +1,7 @@
 use crate::error::ParsingError;
 use std::fmt;
 
-use crate::{Environment, inp_handling, scanner::token::Token};
+use crate::{Environment, runner, scanner::token::Token};
 
 #[derive(Debug, PartialEq, Clone)]
 pub enum Expr {
@@ -60,7 +60,7 @@ impl Statement {
             Statement::Import(path) => {
                 let code = std::fs::read_to_string(path)
                     .map_err(|_| ParsingError::FileNotFound(path.to_owned()))?;
-                inp_handling::run(code, env, false);
+                runner::run(code, env, false);
                 Ok(None)
             }
         }
