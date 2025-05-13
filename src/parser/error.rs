@@ -17,6 +17,9 @@ pub enum ParsingError {
     WrongNumArgs(usize, usize),
     NativeError(String),
     FileNotFound(String),
+    NotIndexable,
+    NotIndex,
+    IndexOutOfBounds,
 }
 impl Debug for ParsingError {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
@@ -38,6 +41,9 @@ impl Debug for ParsingError {
             ParsingError::NativeError(e) => write!(f, "Native error: '{e}'"),
             ParsingError::FileNotFound(path) => write!(f, "File '{path}' not found"),
             ParsingError::ExpectedBoolean => write!(f, "Expected boolean"),
+            ParsingError::NotIndexable => write!(f, "You cannot index that"),
+            ParsingError::NotIndex => write!(f, "You cannot use that as an index"),
+            ParsingError::IndexOutOfBounds => write!(f, "Index out of bounds"),
         }
     }
 }

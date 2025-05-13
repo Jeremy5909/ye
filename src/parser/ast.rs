@@ -15,6 +15,7 @@ pub enum Expr {
     Call(Box<Expr>, Vec<Expr>),                            // f()
     If(Box<Expr>, Vec<Statement>, Option<Vec<Statement>>), // if (x) {..} else {..}
     ArrayLiteral(Vec<Expr>),                               // [3, 5.0, true, "hi"]
+    Index(Box<Expr>, Box<Expr>),                           // arr[3]
 }
 
 #[derive(Debug, Clone, PartialEq)]
