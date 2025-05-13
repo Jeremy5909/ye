@@ -1,5 +1,5 @@
 use crate::error::ParsingError;
-use std::fmt;
+use std::fmt::{self};
 
 use crate::{Environment, runner, scanner::token::Token};
 
@@ -29,11 +29,19 @@ pub enum Value {
 impl fmt::Display for Value {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         match self {
-            Self::Number(n) => write!(f, "{n}",),
-            Self::Str(s) => write!(f, "{s}"),
-            Self::Bool(b) => write!(f, "{b}"),
-            Self::Array(v) => write!(f, "{v:?}"),
-            _ => write!(f, "?"),
+            Value::Number(n) => write!(f, "{n}"),
+            Value::Str(s) => write!(f, "\"{s}\""),
+            Value::Bool(b) => write!(f, "{b}"),
+            Value::Array(arr) => write!(
+                f,
+                "[{}]",
+                arr.iter()
+                    .map(|v| format!("{v}"))
+                    .collect::<Vec<_>>()
+                    .join(", ")
+            ),
+            Value::Function(func) => write!(f, "{func:?}"),
+            Value::NativeFunction(func) => write!(f, "{func:?}"),
         }
     }
 }
