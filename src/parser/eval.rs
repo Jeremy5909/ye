@@ -1,5 +1,3 @@
-use std::usize;
-
 use crate::token::Token;
 
 use super::{
@@ -129,14 +127,14 @@ impl Expr {
                 let index = index.eval(env)?;
                 let i = match index {
                     Value::Number(ind) => Ok(ind),
-                    _ => return Err(ParsingError::NotIndex),
+                    _ => return Err(ParsingError::NotIndex(index)),
                 }? as usize;
                 match arr {
                     Value::Array(elements) => elements
                         .get(i)
                         .cloned()
-                        .ok_or(ParsingError::IndexOutOfBounds),
-                    _ => Err(ParsingError::NotIndexable),
+                        .ok_or(ParsingError::IndexOutOfBounds(i)),
+                    _ => Err(ParsingError::NotIndexable(arr)),
                 }
             }
         }
