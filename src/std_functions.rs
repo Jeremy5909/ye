@@ -6,12 +6,8 @@ fn print(args: Vec<Value>) -> Result<Value, String> {
     for arg in args {
         print!("{arg}");
     }
-    Ok(Value::Bool(true))
-}
-fn println(args: Vec<Value>) -> Result<Value, String> {
-    let res = print(args);
     println!();
-    res
+    Ok(Value::Bool(true))
 }
 fn input(_: Vec<Value>) -> Result<Value, String> {
     let mut buf = String::new();
@@ -25,16 +21,9 @@ fn prompt(args: Vec<Value>) -> Result<Value, String> {
     stdout().flush().map_err(|_| "Error flushing stdout")?;
     input(args)
 }
-fn promptln(args: Vec<Value>) -> Result<Value, String> {
-    println(args.clone())?;
-    stdout().flush().map_err(|_| "Error flushing stdout")?;
-    input(args)
-}
 
 pub fn add_functions(env: &mut Environment) {
     env.set("print", Value::NativeFunction(print));
-    env.set("println", Value::NativeFunction(println));
     env.set("input", Value::NativeFunction(input));
     env.set("prompt", Value::NativeFunction(prompt));
-    env.set("promptln", Value::NativeFunction(promptln));
 }
