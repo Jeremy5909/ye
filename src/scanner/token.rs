@@ -23,6 +23,7 @@ pub enum Token {
     LBracket,
     RBracket,
     Comma,
+    Colon,
 
     For,
     If,

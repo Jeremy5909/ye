@@ -22,13 +22,13 @@ impl Parser {
                     }
                 }
                 Token::Fn => {
-                    self.consume(Token::LParen)?;
+                    self.consume(Token::LBracket)?;
                     let mut params = Vec::new();
-                    if self.consume(Token::RParen).is_err() {
+                    if self.consume(Token::RBracket).is_err() {
                         loop {
                             params.push(self.consume_id()?);
                             if self.consume(Token::Comma).is_err() {
-                                self.consume(Token::RParen)?;
+                                self.consume(Token::RBracket)?;
                                 break;
                             }
                         }

@@ -10,11 +10,11 @@ pub enum Expr {
     Binary(Box<Expr>, Token, Box<Expr>),                   // x+3.0
     Unary(Token, Box<Expr>),                               // !true
     Assign(String, Box<Expr>),                             // x=3
-    Function(Vec<String>, Vec<Statement>),                 // fn(x) {x}
-    Call(Box<Expr>, Vec<Expr>),                            // f()
+    Function(Vec<String>, Vec<Statement>),                 // fn[x)] {x}
+    Call(Box<Expr>, Box<Expr>),                            // add:[1,2]
     If(Box<Expr>, Vec<Statement>, Option<Vec<Statement>>), // if (x) {..} else {..}
     ArrayLiteral(Vec<Expr>),                               // [3, 5.0, true, "hi"]
-    Index(Box<Expr>, Box<Expr>),                           // arr[3]
+    Index(Box<Expr>, Box<Expr>),                           // arr{3}
 }
 
 #[derive(Clone, PartialEq)]
