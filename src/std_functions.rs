@@ -7,14 +7,14 @@ fn print(args: Vec<Value>) -> Result<Value, String> {
         print!("{arg}");
     }
     println!();
-    Ok(Value::Bool(true))
+    Ok(Value::Void)
 }
 fn input(_: Vec<Value>) -> Result<Value, String> {
     let mut buf = String::new();
     stdin()
         .read_line(&mut buf)
         .map_err(|_| "Error getting input")?;
-    Ok(Value::Str(buf.trim_end().to_owned()))
+    Ok(Value::Void)
 }
 fn prompt(args: Vec<Value>) -> Result<Value, String> {
     print(args.clone())?;

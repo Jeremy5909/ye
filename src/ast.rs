@@ -25,6 +25,7 @@ pub enum Value {
     Function(Function),
     NativeFunction(fn(Vec<Value>) -> Result<Value, String>),
     Array(Vec<Value>),
+    Void,
 }
 impl fmt::Display for Value {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
@@ -42,6 +43,7 @@ impl fmt::Display for Value {
             ),
             Value::Function(func) => write!(f, "{func:?}"),
             Value::NativeFunction(func) => write!(f, "{func:?}"),
+            Value::Void => Ok(()),
         }
     }
 }
