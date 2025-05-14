@@ -65,17 +65,17 @@ fn string_addition() {
 #[test]
 fn empty_func() {
     let mut env = Environment::new();
-    test("let func = fn() {}", &mut env)
+    test("let func = fn[] {}", &mut env)
 }
 
 #[test]
 fn one_inp_func() {
     let mut env = Environment::new();
     test(
-        "let square = fn(x) {
+        "let square = fn[ x ] {
             x*x
         }
-        let result = square(3)",
+        let result = square:3",
         &mut env,
     );
     assert_eq!(*env.get("result").unwrap(), Value::Number(9.0));
@@ -85,10 +85,10 @@ fn one_inp_func() {
 fn two_inp_func() {
     let mut env = Environment::new();
     test(
-        "let add = fn(x, y) {
+        "let add = fn[x, y] {
             x+y
         }
-        let result = add(4,7)",
+        let result = add:[4,7]",
         &mut env,
     );
     assert_eq!(*env.get("result").unwrap(), Value::Number(11.0));
@@ -98,7 +98,7 @@ fn two_inp_func() {
 fn anon_func() {
     let mut env = Environment::new();
     test(
-        "let s = fn(string){string+\" \"+string}(\"hello\")",
+        "let s = fn[string]{string+\" \"+string}:\"hello\"",
         &mut env,
     );
     assert_eq!(*env.get("s").unwrap(), Value::Str("hello hello".to_owned()));
@@ -151,28 +151,32 @@ fn and_comparison() {
 }
 
 #[test]
+fn conditional() {
+    let mut env = Environment::new();
+    test(" if 0 == 0 { 0 } ", &mut env);
+}
+
+#[test]
 fn factorial() {
     let mut env = Environment::new();
     test(
-        "
-        let factorial = fn(number) {
+        " let factorial = fn[number] {
           if number <= 0 {
             0
           } else {
             if number == 0 | number == 1 {
               1
             } else {
-              number * factorial(number-1)
+              number * factorial:number-1
             }
           }
         }
-        let a = factorial(-2)
-        let b = factorial(-1)
-        let c = factorial(0)
-        let d = factorial(1)
-        let e = factorial(2)
-        let f = factorial(3)
-            ",
+        let a = factorial:-2
+        let b = factorial:-1
+        let c = factorial:0
+        let d = factorial:1
+        let e = factorial:2
+        let f = factorial:3 ",
         &mut env,
     );
     assert_eq!(*env.get("a").unwrap(), Value::Number(0.0));
