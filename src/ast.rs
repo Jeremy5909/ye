@@ -17,7 +17,7 @@ pub enum Expr {
     Index(Box<Expr>, Box<Expr>),                           // arr[3]
 }
 
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Clone, PartialEq)]
 pub enum Value {
     Number(f32),
     Str(String),
@@ -30,7 +30,7 @@ impl fmt::Display for Value {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         match self {
             Value::Number(n) => write!(f, "{n}"),
-            Value::Str(s) => write!(f, "\"{s}\""),
+            Value::Str(s) => write!(f, "{s}"),
             Value::Bool(b) => write!(f, "{b}"),
             Value::Array(arr) => write!(
                 f,
@@ -42,6 +42,14 @@ impl fmt::Display for Value {
             ),
             Value::Function(func) => write!(f, "{func:?}"),
             Value::NativeFunction(func) => write!(f, "{func:?}"),
+        }
+    }
+}
+impl fmt::Debug for Value {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        match self {
+            Value::Str(s) => write!(f, "\"{s}\""),
+            _ => write!(f, "{self}"),
         }
     }
 }
