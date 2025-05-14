@@ -10,7 +10,8 @@ fn test(commands: &str, env: &mut Environment) {
 fn assign() {
     let mut env = Environment::new();
     test(
-        "let x=5 
+        "
+        let x=5 
         x",
         &mut env,
     );
@@ -151,9 +152,10 @@ fn and_comparison() {
 }
 
 #[test]
-fn conditional() {
+fn assign_conditional() {
     let mut env = Environment::new();
-    test(" if 0 == 0 { 0 } ", &mut env);
+    test("let x = if 1+7 == 4*2 {\"wow\"} else {\"bruh\"}", &mut env);
+    assert_eq!(*env.get("x").unwrap(), Value::Str("wow".to_owned()));
 }
 
 #[test]
