@@ -17,9 +17,9 @@ impl Parser {
                     }
                 }
                 expr = Expr::Call(Box::new(expr), args)
-            } else if self.consume(Token::LBracket).is_ok() {
+            } else if self.consume(Token::LBrace).is_ok() {
                 let index = self.parse_expr()?;
-                self.consume(Token::RBracket)?;
+                self.consume(Token::RBrace)?;
                 expr = Expr::Index(Box::new(expr), Box::new(index))
             } else {
                 break;
