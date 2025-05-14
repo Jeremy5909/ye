@@ -68,7 +68,7 @@ impl Statement {
             Statement::Import(path) => {
                 let code = std::fs::read_to_string(path)
                     .map_err(|_| ParsingError::FileNotFound(path.to_owned()))?;
-                runner::run(code, env);
+                runner::run(code, env, false);
                 Ok(None)
             }
         }

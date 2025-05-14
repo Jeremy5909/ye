@@ -7,7 +7,7 @@ use crate::{environment::Environment, parser::Parser, scanner::Scanner};
 
 pub fn run_file(file_name: &str, env: &mut Environment) {
     let file = fs::read_to_string(file_name).expect("File not found");
-    run(file, env);
+    run(file, env, false);
 }
 
 pub fn run_input(env: &mut Environment) {
@@ -27,18 +27,24 @@ pub fn run_input(env: &mut Environment) {
             break;
         }
     }
-    run(inp, env)
+    run(inp, env, true)
 }
 
-pub fn run(inp: String, env: &mut Environment) {
+pub fn run(inp: String, env: &mut Environment, dbg: bool) {
     let inp = inp.trim();
     let mut scanner = Scanner::from(inp);
     scanner.scan_tokens();
+    if dbg {
+        println!("{:?}", scanner.tokens)
+    }
     let mut parser = Parser::new(scanner.tokens);
     let stmts = parser.parse_all().unwrap();
     for stmt in stmts {
+        if dbg {
+            println!("{stmt:?}")
+        }
         if let Some(val) = stmt.eval(env).unwrap() {
-            println!("{val}")
+            println!("Value: {val:?}")
         }
     }
 }
