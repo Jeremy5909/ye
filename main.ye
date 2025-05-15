@@ -1,9 +1,5 @@
-let add = fn[x, y] {
-  x+y
+let x = 0
+while x < 100000 {
+  x = x + 1
+  print:x
 }
-
-print:add:[1, 2]
-
-let args = [1,2]
-
-print:add:args

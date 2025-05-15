@@ -4,6 +4,7 @@ use call_eval::eval_call;
 use if_eval::eval_if;
 use index_eval::eval_index;
 use unary_eval::eval_unary;
+use while_eval::eval_while;
 
 use super::{
     ast::{Expr, Function, Value},
@@ -17,6 +18,7 @@ mod call_eval;
 mod if_eval;
 mod index_eval;
 mod unary_eval;
+mod while_eval;
 
 impl Expr {
     pub fn eval(&self, env: &mut Environment) -> Result<Value, ParsingError> {
@@ -37,6 +39,7 @@ impl Expr {
             Expr::If(condition, then_branch, else_branch) => {
                 eval_if(env, condition, then_branch, else_branch)
             }
+            Expr::While(condition, statements) => eval_while(env, condition, statements),
             Expr::ArrayLiteral(elements) => {
                 let mut arr = Vec::new();
                 for element in elements {

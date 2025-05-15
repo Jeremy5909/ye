@@ -64,6 +64,16 @@ impl Parser {
 
                     Ok(Expr::If(Box::new(condition), then_branch, else_branch))
                 }
+                Token::While => {
+                    let condition = self.parse_expr()?;
+                    self.consume(Token::LBrace)?;
+                    let mut exprs = Vec::new();
+                    while self.peek() != Some(&Token::RBrace) {
+                        exprs.push(self.parse_statement()?);
+                    }
+                    self.consume(Token::RBrace)?;
+                    Ok(Expr::While(Box::new(condition), exprs))
+                }
                 Token::LBracket => {
                     let mut arr = Vec::new();
                     if self.consume(Token::RBracket).is_err() {

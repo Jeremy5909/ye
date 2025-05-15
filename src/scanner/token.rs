@@ -26,6 +26,7 @@ pub enum Token {
     Colon,
 
     For,
+    While,
     If,
     Else,
     Fn,
