@@ -14,7 +14,6 @@ pub enum Expr {
     Call(Box<Expr>, Box<Expr>),                            // add:[1,2]
     If(Box<Expr>, Vec<Statement>, Option<Vec<Statement>>), // if (x) {..} else {..}
     ArrayLiteral(Vec<Expr>),                               // [3, 5.0, true, "hi"]
-    Index(Box<Expr>, Box<Expr>),                           // arr[3]
     While(Box<Expr>, Vec<Statement>),                      // while x==1 {..}
     For(Box<Expr>, String, Vec<Statement>),                // arr::item {..}
 }
