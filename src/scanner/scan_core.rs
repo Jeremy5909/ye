@@ -10,7 +10,22 @@ impl Scanner {
                 '+' => Token::Add,
                 '-' => Token::Sub,
                 '*' => Token::Mult,
-                '/' => Token::Div,
+                '/' => match self.peek() {
+                    Some('/') => {
+                        loop {
+                            if self.peek().is_none() || self.peek() == Some('\n') {
+                                break;
+                            }
+                            self.advance();
+                        }
+                        continue;
+                        /* while self.peek().is_some() {
+                            self.advance();
+                        }
+                        continue; */
+                    }
+                    _ => Token::Div,
+                },
                 '(' => Token::LParen,
                 ')' => Token::RParen,
                 ',' => Token::Comma,
