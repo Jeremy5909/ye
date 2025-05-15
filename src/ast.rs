@@ -38,7 +38,7 @@ impl fmt::Display for Value {
                 f,
                 "[{}]",
                 arr.iter()
-                    .map(|v| format!("{v}"))
+                    .map(|v| format!("{v:?}"))
                     .collect::<Vec<_>>()
                     .join(", ")
             ),
