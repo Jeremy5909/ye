@@ -22,6 +22,7 @@ pub enum ParsingError {
     NotIndex(Value),
     IndexOutOfBounds(usize),
     ExpectedArray,
+    ExpectedInteger,
 }
 impl Debug for ParsingError {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
@@ -47,6 +48,7 @@ impl Debug for ParsingError {
             ParsingError::NotIndex(v) => write!(f, "You cannot use {v} as an index"),
             ParsingError::IndexOutOfBounds(i) => write!(f, "Index '{i}' out of bounds"),
             ParsingError::ExpectedArray => write!(f, "Expected array"),
+            ParsingError::ExpectedInteger => write!(f, "Expected integer"),
         }
     }
 }

@@ -26,5 +26,3 @@ arr::x {...} // cool
 ## semicolons
 
 ## arr\[3\] = 0
-
-## arr:3 is same as arr[3] (and then maybe remove arr[3]?)
