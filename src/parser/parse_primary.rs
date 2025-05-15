@@ -33,31 +33,14 @@ impl Parser {
                             }
                         }
                     }
-                    self.consume(Token::LBrace)?;
-                    let mut body = Vec::new();
-                    while self.peek() != Some(&Token::RBrace) {
-                        body.push(self.parse_statement()?);
-                    }
-                    self.consume(Token::RBrace)?;
+                    let body = self.consume_block()?;
                     Ok(Expr::Function(params, body))
                 }
                 Token::If => {
                     let condition = self.parse_expr()?;
-                    self.consume(Token::LBrace)?;
-                    let mut then_branch = Vec::new();
-                    while self.peek() != Some(&Token::RBrace) {
-                        then_branch.push(self.parse_statement()?);
-                    }
-                    self.consume(Token::RBrace)?;
-
+                    let then_branch = self.consume_block()?;
                     let else_branch = if self.consume(Token::Else).is_ok() {
-                        self.consume(Token::LBrace)?;
-                        let mut else_branch = Vec::new();
-                        while self.peek() != Some(&Token::RBrace) {
-                            else_branch.push(self.parse_statement()?);
-                        }
-                        self.consume(Token::RBrace)?;
-                        Some(else_branch)
+                        Some(self.consume_block()?)
                     } else {
                         None
                     };

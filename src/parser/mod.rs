@@ -57,6 +57,16 @@ impl Parser {
         }
     }
 
+    pub fn consume_block(&mut self) -> Result<Vec<Statement>, ParsingError> {
+        self.consume(Token::LBrace)?;
+        let mut block = Vec::new();
+        while self.peek() != Some(&Token::RBrace) {
+            block.push(self.parse_statement()?);
+        }
+        self.consume(Token::RBrace)?;
+        Ok(block)
+    }
+
     pub fn parse_all(&mut self) -> Result<Vec<Statement>, ParsingError> {
         let mut statements = Vec::new();
         while self.peek().is_some() {
