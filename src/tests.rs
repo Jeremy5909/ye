@@ -188,3 +188,19 @@ fn factorial() {
     assert_eq!(*env.get("e").unwrap(), Value::Number(2.0));
     assert_eq!(*env.get("f").unwrap(), Value::Number(6.0));
 }
+
+#[test]
+fn list_comp() {
+    let mut env = Environment::new();
+    test("let res = [1,2,3,4,5,6]::x{if x != 3 {x*2}}", &mut env);
+    assert_eq!(
+        *env.get("res").unwrap(),
+        Value::Array(vec![
+            Value::Number(2.0),
+            Value::Number(4.0),
+            Value::Number(8.0),
+            Value::Number(10.0),
+            Value::Number(12.0),
+        ])
+    )
+}
