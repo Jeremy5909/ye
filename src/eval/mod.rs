@@ -1,6 +1,7 @@
 use assign_eval::eval_assign;
 use binary_eval::eval_binary;
 use call_eval::eval_call;
+use for_eval::eval_for;
 use if_eval::eval_if;
 use index_eval::eval_index;
 use unary_eval::eval_unary;
@@ -15,6 +16,7 @@ use super::{
 mod assign_eval;
 mod binary_eval;
 mod call_eval;
+mod for_eval;
 mod if_eval;
 mod index_eval;
 mod unary_eval;
@@ -48,6 +50,9 @@ impl Expr {
                 Ok(Value::Array(arr))
             }
             Expr::Index(arr, index) => eval_index(env, arr, index),
+            Expr::For(arr, iter_name, statements) => {
+                eval_for(env, arr, iter_name.to_owned(), statements)
+            }
         }
     }
 }

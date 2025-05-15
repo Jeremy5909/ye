@@ -10,12 +10,13 @@ pub enum Expr {
     Binary(Box<Expr>, Token, Box<Expr>),                   // x+3.0
     Unary(Token, Box<Expr>),                               // !true
     Assign(String, Box<Expr>),                             // x=3
-    Function(Vec<String>, Vec<Statement>),                 // fn[x)] {x}
+    Function(Vec<String>, Vec<Statement>),                 // fn[x] {x}
     Call(Box<Expr>, Box<Expr>),                            // add:[1,2]
     If(Box<Expr>, Vec<Statement>, Option<Vec<Statement>>), // if (x) {..} else {..}
     ArrayLiteral(Vec<Expr>),                               // [3, 5.0, true, "hi"]
     Index(Box<Expr>, Box<Expr>),                           // arr[3]
     While(Box<Expr>, Vec<Statement>),                      // while x==1 {..}
+    For(Box<Expr>, String, Vec<Statement>),                // arr::item {..}
 }
 
 #[derive(Clone, PartialEq)]
@@ -42,9 +43,7 @@ impl fmt::Display for Value {
                     .collect::<Vec<_>>()
                     .join(", ")
             ),
-            Value::Function(func) => write!(f, "{func:?}"),
-            Value::NativeFunction(func) => write!(f, "{func:?}"),
-            Value::Void => Ok(()),
+            _ => Ok(()),
         }
     }
 }

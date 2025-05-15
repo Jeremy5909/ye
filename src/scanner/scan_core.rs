@@ -35,7 +35,13 @@ impl Scanner {
                 ']' => Token::RBracket,
                 '|' => Token::Or,
                 '&' => Token::And,
-                ':' => Token::Colon,
+                ':' => match self.peek() {
+                    Some(':') => {
+                        self.advance();
+                        Token::DoubleColon
+                    }
+                    _ => Token::Colon,
+                },
                 '=' => match self.peek() {
                     Some('=') => {
                         self.advance();

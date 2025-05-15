@@ -12,6 +12,10 @@ impl Parser {
                 let index = self.parse_expr()?;
                 self.consume(Token::RBracket)?;
                 expr = Expr::Index(Box::new(expr), Box::new(index))
+            } else if self.consume(Token::DoubleColon).is_ok() {
+                let arg = self.consume_id()?;
+                let block = self.consume_block()?;
+                expr = Expr::For(Box::new(expr), arg, block)
             } else {
                 break;
             }

@@ -15,10 +15,6 @@ let print_add_three = print:add:3
 
 ## return statement
 
-## for loop
-
-possible syntax
-
 ```
 for x in arr {...} // basic
 ```
@@ -28,3 +24,7 @@ arr::x {...} // cool
 ```
 
 ## semicolons
+
+## arr\[3\] = 0
+
+## arr:3 is same as arr[3] (and then maybe remove arr[3]?)

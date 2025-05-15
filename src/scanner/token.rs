@@ -24,6 +24,7 @@ pub enum Token {
     RBracket,
     Comma,
     Colon,
+    DoubleColon,
 
     For,
     While,
