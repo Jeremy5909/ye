@@ -27,7 +27,7 @@ pub fn eval_if(
                 }
                 Ok(result.unwrap_or(Value::Void))
             } else {
-                Ok(Value::Bool(false))
+                Ok(Value::Void)
             }
         }
         _ => Err(ParsingError::ExpectedBoolean),
