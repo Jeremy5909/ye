@@ -14,7 +14,7 @@ pub enum Expr {
     Call(Box<Expr>, Box<Expr>),                            // add:[1,2]
     If(Box<Expr>, Vec<Statement>, Option<Vec<Statement>>), // if (x) {..} else {..}
     ArrayLiteral(Vec<Expr>),                               // [3, 5.0, true, "hi"]
-    Index(Box<Expr>, Box<Expr>),                           // arr{3}
+    Index(Box<Expr>, Box<Expr>),                           // arr[3]
 }
 
 #[derive(Clone, PartialEq)]
@@ -78,7 +78,7 @@ impl Statement {
             Statement::Import(path) => {
                 let code = std::fs::read_to_string(path)
                     .map_err(|_| ParsingError::FileNotFound(path.to_owned()))?;
-                runner::run(code, env, false);
+                runner::run(code, env, false)?;
                 Ok(None)
             }
         }

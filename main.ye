@@ -2,9 +2,8 @@ let add = fn[x, y] {
   x+y
 }
 
-println(add:[1, 2])
+print:add:[1, 2]
 
 let args = [1,2]
 
-println(add:args)
-
+print:add:args

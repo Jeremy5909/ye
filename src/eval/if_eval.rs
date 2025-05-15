@@ -17,7 +17,7 @@ pub fn eval_if(
             for stmt in then_branch {
                 result = stmt.eval(env)?;
             }
-            Ok(result.unwrap_or(Value::Bool(false)))
+            Ok(result.unwrap_or(Value::Void))
         }
         Value::Bool(false) => {
             if let Some(else_branch) = else_branch {
@@ -25,7 +25,7 @@ pub fn eval_if(
                 for stmt in else_branch {
                     result = stmt.eval(env)?;
                 }
-                Ok(result.unwrap_or(Value::Bool(false)))
+                Ok(result.unwrap_or(Value::Void))
             } else {
                 Ok(Value::Bool(false))
             }
